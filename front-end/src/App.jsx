@@ -59,7 +59,7 @@ function App() {
             </Route>
             <Route path="pricing" element={<Pricing />} />
             <Route path="profile" element={<ProtectedRoute />}>
-              <Route index element={<UserProfile />}>
+              <Route path="" element={<UserProfile />}>
                 <Route
                   index
                   element={<Navigate replace to="profile-details" />}
