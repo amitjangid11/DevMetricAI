@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Filter from "../component/Filter";
 import { Outlet } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import axios from "axios";
+import axios from "../axios";
 
 const userToken = localStorage.getItem("auth_token");
 const decoded = userToken && jwtDecode(userToken);
@@ -45,7 +45,7 @@ const ImproveCard = ({ question, answer }) => {
     async function fetchStrengthAndWeeknees() {
       try {
         await axios.get(
-          "http://127.0.0.1:5000/api/get-user-strength-and-weekness"
+          `/api/get-user-strength-and-weekness`
         );
       } catch (error) {
         console.log("ERROR: ", error);

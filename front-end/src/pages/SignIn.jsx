@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -32,16 +32,16 @@ function SignIn() {
   }, []);
 
   const googleLogin = () => {
-    window.location.href = "http://127.0.0.1:5000/login/google";
+    window.location.href = `${import.meta.env.VITE_PRODUCTION_BACKEND_URL}/login/google`;
   };
   const githubLogin = () => {
-    window.location.href = "http://127.0.0.1:5000/login/github";
+    window.location.href = `${import.meta.env.VITE_PRODUCTION_BACKEND_URL}/login/github`;
   };
 
   const onSubmit = async (data) => {
     try {
       const res = await axios.post(
-        "http://127.0.0.1:5000/api/users/login",
+        `/api/users/login`,
         data
       );
 

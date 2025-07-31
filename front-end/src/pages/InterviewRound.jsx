@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import SpeechToText from "../component/SpeechToText";
-import axios from "axios";
+import axios from "../axios";
 import { jwtDecode } from "jwt-decode";
 import { CiWarning } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ function InterviewRound() {
   async function handleSpeechSubmition(text) {
     try {
       const res = await axios.post(
-        "http://127.0.0.1:5000/api/generate-interview-question",
+        `/api/generate-interview-question`,
         text,
         {
           headers: {
@@ -61,7 +61,7 @@ function InterviewRound() {
 
     try {
       await axios.post(
-        "http://127.0.0.1:5000/api/generate-interview-question",
+        `/api/generate-interview-question`,
         text,
         {
           headers: {

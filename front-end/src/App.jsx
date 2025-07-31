@@ -45,29 +45,39 @@ function App() {
             <Route path="upload-resume" element={<ProtectedRoute />}>
               <Route index element={<UploadResume />} />
             </Route>
-            <Route path="coding-round" element={<CodingRound />} />
-            <Route path="interview-round" element={<InterviewRound />} />
-            <Route path="result" element={<Result />} />
-            <Route path="contact" element={<Contact />} />
+            <Route path="coding-round" element={<ProtectedRoute />}>
+              <Route index element={<CodingRound />} />
+            </Route>
+            <Route path="interview-round" element={<ProtectedRoute />}>
+              <Route index element={<InterviewRound />} />
+            </Route>
+            <Route path="result" element={<ProtectedRoute />}>
+              <Route index element={<Result />} />
+            </Route>
+            <Route path="contact" element={<ProtectedRoute />}>
+              <Route index element={<Contact />} />
+            </Route>
             <Route path="pricing" element={<Pricing />} />
-            <Route path="profile" element={<UserProfile />}>
-              <Route
-                index
-                element={<Navigate replace to="profile-details" />}
-              />
-              <Route path="profile-details" element={<Profile />} />
-              <Route
-                path="previous-interview"
-                element={<PreviousInterview />}
-              />
-              <Route path="performance" element={<UserPerformance />} />
-              <Route path="suggestions" element={<Suggestions />}>
-                <Route index element={<Navigate replace to="article" />} />
-                <Route path="article" element={<Article />} />
-                <Route path="course" element={<Course />} />
-                <Route path="video" element={<Video />} />
+            <Route path="profile" element={<ProtectedRoute />}>
+              <Route index element={<UserProfile />}>
+                <Route
+                  index
+                  element={<Navigate replace to="profile-details" />}
+                />
+                <Route path="profile-details" element={<Profile />} />
+                <Route
+                  path="previous-interview"
+                  element={<PreviousInterview />}
+                />
+                <Route path="performance" element={<UserPerformance />} />
+                <Route path="suggestions" element={<Suggestions />}>
+                  <Route index element={<Navigate replace to="article" />} />
+                  <Route path="article" element={<Article />} />
+                  <Route path="course" element={<Course />} />
+                  <Route path="video" element={<Video />} />
+                </Route>
+                <Route path="notifications" element={<Notifications />} />
               </Route>
-              <Route path="notifications" element={<Notifications />} />
             </Route>
           </Route>
           <Route path="/signin" element={<SignIn />} />

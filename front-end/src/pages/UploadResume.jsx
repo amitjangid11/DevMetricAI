@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../component/Spinner";
@@ -31,7 +31,7 @@ export default function UploadResume() {
           subscriptionTitle,
         };
         await axios.post(
-          "http://127.0.0.1:5000/api/create-subscription-details",
+          `/api/create-subscription-details`,
           finalData
         );
       } catch (error) {
@@ -52,7 +52,7 @@ export default function UploadResume() {
       setIsLoading(true);
 
       const response = await axios.post(
-        "http://127.0.0.1:5000/api/upload-resume",
+        `/api/upload-resume`,
         formData,
         {
           headers: {

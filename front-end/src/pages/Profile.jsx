@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios from "../axios";
 import toast from "react-hot-toast";
+import supabase from "../services/supabase";
 
 const ITJobs = [
   "Full Stack Web Developer",
@@ -46,16 +47,72 @@ function Profile() {
   const [isOtherRoleDisabled, setIsOtherRoleDisabled] = useState(true);
   const [isUpdate, setIsUpdate] = useState(false);
   const { register, handleSubmit, reset } = useForm();
+  const [fileObj, setFileObj] = useState({});
+
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    setFileObj(file);
+    if (file) {
+      // Check file size (e.g., max 1MB)
+      if (file.size > 1024 * 1024) {
+        alert("File size exceeds 1MB. Please choose a smaller file.");
+        return;
+      }
+
+      // Preview the selected image
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result); // Set the base64 encoded image
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const onSubmit = async (data) => {
     setIsUpdate(true);
+
     try {
-      const res = await axios.patch(
-        "http://127.0.0.1:5000/api/update-profile",
-        data
-      );
-      reset();
-      toast.success("Update complete. Your profile is now up to date.");
+      let imageUrl = null;
+      if (fileObj) {
+        const fileName = `${Date.now()}-${fileObj.name}`;
+
+        const { data: imageData, error } = await supabase.storage
+          .from("profile-image")
+          .upload(fileName, fileObj, {
+            contentType: fileObj.type, // Ensure correct content type
+          });
+
+        if (error) {
+          console.error("Error uploading image:", error);
+          alert(`Failed to upload the image: ${fileObj.name}`);
+          return; // Exit if the upload fails
+        }
+
+        const { data: publicURLData, error: urlError } = supabase.storage
+          .from("profile-image")
+          .getPublicUrl(fileName);
+
+        if (urlError) {
+          console.error("Error getting public URL:", urlError);
+          alert(`Failed to get public URL for: ${fileObj.name}`);
+          return; // Exit if URL retrieval fails
+        }
+
+        imageUrl = publicURLData.publicUrl; // Store the public URL
+        setImage(imageUrl);
+
+        if (imageUrl) {
+          data.image = imageUrl;
+        }
+        const res = await axios.patch(`/api/update-profile`, data);
+        reset();
+        if (res.data.token) {
+          localStorage.removeItem("auth_token");
+          localStorage.setItem("auth_token", res.data.token);
+        }
+        toast.success("Update complete. Your profile is now up to date.");
+        window.location.reload();
+      }
     } catch (err) {
       console.error("Update failed:", err.response?.data || err.message);
     }
@@ -65,7 +122,7 @@ function Profile() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:5000/api/get-data", {
+        const res = await axios.get(`/api/get-data`, {
           headers: {
             "Content-Type": "application/json",
             Email: email,
@@ -91,9 +148,19 @@ function Profile() {
           alt="user profile"
           className="w-20 h-20 rounded-full"
         />
-        <button className="border-4 border-[#0C1A31] p-2 w-full md:w-36 rounded-[5px]">
+
+        <label
+          htmlFor="profileUpload"
+          className="cursor-pointer border-4 border-[#0C1A31] p-2 w-full md:w-36 rounded-[5px] text-center"
+        >
           Change Profile
-        </button>
+          <input
+            type="file"
+            id="profileUpload"
+            className="hidden"
+            onChange={handleImage} // <-- define this function
+          />
+        </label>
       </div>
 
       <div className="w-full max-w-4xl mx-auto">

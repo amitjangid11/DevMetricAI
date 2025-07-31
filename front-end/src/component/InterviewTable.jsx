@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios";
 import { useEffect, useState } from "react";
 
 import { jwtDecode } from "jwt-decode";
@@ -17,7 +17,7 @@ const InterviewTable = () => {
       try {
         setIsLoading(true);
         const res = await axios.get(
-          "http://127.0.0.1:5000/api/get-interview-result",
+          `/api/get-interview-result`,
 
           {
             headers: {

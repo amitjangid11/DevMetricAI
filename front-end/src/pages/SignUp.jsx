@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios from "../axios";
 import toast from "react-hot-toast";
 
 const ITJobs = [
@@ -53,8 +53,8 @@ function SignUp() {
 
       delete finalData.otherRole;
 
-      const res = await axios.post(
-        "http://127.0.0.1:5000/api/users/signup",
+      await axios.post(
+        `/api/users/signup`,
         finalData
       );
       toast.success(
@@ -70,11 +70,14 @@ function SignUp() {
     }
   }
 
+  console.log("BACKEND ->", import.meta.env.VITE_PRODUCTION_BACKEND_URL);
+
   const googleLogin = () => {
-    window.location.href = "http://127.0.0.1:5000/signup/google";
+    window.location.href = `${import.meta.env.VITE_PRODUCTION_BACKEND_URL}/signup/google`;
   };
+
   const githubLogin = () => {
-    window.location.href = "http://127.0.0.1:5000/signup/github";
+    window.location.href = `${import.meta.env.VITE_PRODUCTION_BACKEND_URL}/signup/github`;
   };
 
   return (

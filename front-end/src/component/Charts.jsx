@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import { jwtDecode } from "jwt-decode";
 import formatDate from "../utility/Helper";
-import axios from "axios";
+import axios from "../axios";
 import Spinner from "./Spinner";
 
 const userToken = localStorage.getItem("auth_token");
@@ -39,15 +39,12 @@ const Charts = () => {
     const fetchResult = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get(
-          "http://127.0.0.1:5000/api/get-interview-result",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Email: decoded.email,
-            },
-          }
-        );
+        const res = await axios.get(`/api/get-interview-result`, {
+          headers: {
+            "Content-Type": "application/json",
+            Email: decoded.email,
+          },
+        });
 
         const interviewData = res.data.results;
 

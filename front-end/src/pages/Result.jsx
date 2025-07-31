@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios";
 import React, { useEffect, useState } from "react";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { RxCross1 } from "react-icons/rx";
@@ -42,7 +42,7 @@ function Result() {
           localStorage.getItem("codeEvaluationID")
         );
         const res = await axios.get(
-          "http://127.0.0.1:5000/api/get-interview-result",
+          `/api/get-interview-result`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -143,7 +143,7 @@ function Result() {
       </div>
       {/* Profile Button */}
       <div className="flex justify-center items-center mt-10">
-        <Link to='/app/profile/previous-interview'>
+        <Link to="/app/profile/previous-interview">
           <button className="border-2 border-[#152F56] rounded-[50px] p-3 md:p-4 w-40 md:w-44 hover:cursor-pointer hover:bg-[#152F56] text-white transition-all">
             View Profile
           </button>

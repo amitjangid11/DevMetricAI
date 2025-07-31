@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios from "../axios";
 import toast from "react-hot-toast";
 
 function Contact() {
@@ -12,7 +12,10 @@ function Contact() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    await axios.post("http://127.0.0.1:5000/api/contact", data);
+    await axios.post(
+      `/api/contact`,
+      data
+    );
     toast.success("Thanks for reaching out! We'll get back to you shortly.");
     reset();
   };

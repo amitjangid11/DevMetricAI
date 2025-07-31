@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "../axios";
 import toast from "react-hot-toast";
 import { jwtDecode } from "jwt-decode";
 
@@ -15,7 +15,7 @@ function HomeHero() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://127.0.0.1:5000/api/get-subscription-details",
+          `/api/get-subscription-details`,
           {
             headers: {
               Email: decoded.email,
@@ -33,7 +33,6 @@ function HomeHero() {
         let parsed = JSON.parse(fixed); // Now parse like a normal human
 
         setSubsubscriptionData(parsed);
-
       } catch (Err) {
         console.log(Err.message);
       }
@@ -69,7 +68,6 @@ function HomeHero() {
       setToLink("/app/pricing");
     }
   }, [subsubscriptionData]);
-
 
   return (
     <section className="bg-[url('/images/Home-hero.avif')] bg-cover bg-center min-h-screen flex justify-center items-center px-4 text-center">

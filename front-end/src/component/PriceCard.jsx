@@ -4,11 +4,10 @@ import PropTypes, { func } from "prop-types";
 import { Link } from "react-router-dom";
 
 import { jwtDecode } from "jwt-decode";
-import axios from "axios";
+import axios from "../axios";
 
 const userToken = localStorage.getItem("auth_token");
 const decoded = userToken && jwtDecode(userToken);
-
 
 function PriceCard({ priceData }) {
   async function handleSubscription() {
@@ -30,10 +29,9 @@ function PriceCard({ priceData }) {
     };
 
     const session = await axios.post(
-      "http://127.0.0.1:5000/create-checkout-session",
+      `/create-checkout-session`,
       finalData
     );
-
 
     const subscriptionTitle = session.data.title;
 

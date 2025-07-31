@@ -114,7 +114,7 @@ function Navbar() {
               <Avatar decoded={userData} />
             ) : (
               <Link to="/signin">
-                <button className="bg-[#152F56] text-white font-semibold w-full py-2 rounded-full mt-4">
+                <button className="bg-[#152F56] text-white font-semibold w-full py-2 rounded-full mt-4 cursor-pointer">
                   Get Started
                 </button>
               </Link>

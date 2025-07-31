@@ -5,7 +5,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { cpp } from "@codemirror/lang-cpp";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
-import axios, { all } from "axios";
+import axios from "../axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Spinner from "../component/Spinner";
@@ -117,7 +117,7 @@ export default function CodingRound() {
     if (questions.length === allCode.length) {
       setIsLoading(true);
       const res = await axios.post(
-        "http://127.0.0.1:5000/api/review-codes",
+        `/api/review-codes`,
         allCode,
         {
           headers: {
