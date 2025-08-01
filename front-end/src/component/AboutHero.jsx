@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 function AboutHero() {
   return (
     <div className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 lg:px-16 py-10 gap-8">
-      {/* Left Content */}
       <div className="flex flex-col gap-6 items-center lg:items-start text-center lg:text-left max-w-xl">
         <h1 className="text-3xl sm:text-4xl font-bold">
           Revolutionizing Hiring with AI-Powered Precision
@@ -22,7 +21,6 @@ function AboutHero() {
         </Link>
       </div>
 
-      {/* Right Image */}
       <div className="w-full max-w-md">
         <img
           src="/images/abouthero.avif"
