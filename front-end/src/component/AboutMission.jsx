@@ -1,4 +1,3 @@
-import React from "react";
 import AIShape from "./AIShape";
 
 const mission = [

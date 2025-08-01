@@ -1,4 +1,3 @@
-import React from "react";
 import { IoMdTime } from "react-icons/io";
 import { MdRecordVoiceOver } from "react-icons/md";
 import { PiFileMagnifyingGlassBold } from "react-icons/pi";

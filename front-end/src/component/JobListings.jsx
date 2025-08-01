@@ -1,4 +1,3 @@
-import React from "react";
 import { CiLocationOn } from "react-icons/ci";
 
 const jobListings = [
