@@ -1,5 +1,3 @@
-import React from "react";
-
 function Spinner({message}) {
   return (
     <div className="flex flex-col justify-center items-center h-screen space-y-4">

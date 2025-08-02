@@ -1,4 +1,3 @@
-import React from "react";
 import PriceCard from "../component/PriceCard";
 
 const priceData = [

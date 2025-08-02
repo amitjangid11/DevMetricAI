@@ -1,4 +1,3 @@
-import React from "react";
 import SideNavigation from "../component/SideNavigation";
 import { Outlet } from "react-router-dom";
 

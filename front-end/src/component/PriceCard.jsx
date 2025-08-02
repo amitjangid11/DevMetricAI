@@ -1,4 +1,3 @@
-import React from "react";
 import PriceCardDetails from "./PriceCardDetails";
 import PropTypes, { func } from "prop-types";
 import { Link } from "react-router-dom";

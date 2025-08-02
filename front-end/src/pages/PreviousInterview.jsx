@@ -1,4 +1,3 @@
-import React from "react";
 import InterviewTable from "../component/InterviewTable";
 
 function PreviousInterview() {
