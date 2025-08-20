@@ -2,8 +2,11 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
+// Fix __dirname for ESM
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+
   server: {
     proxy: {
       "/api": {
@@ -13,8 +16,7 @@ export default defineConfig({
       },
     },
   },
-  // 💡 Add this build-time environment prefix (optional but good practice)
   define: {
-    "process.env": {},
+    "process.env": {}, // optional, avoids "process is not defined"
   },
 });

@@ -23,9 +23,9 @@ function HomeReview() {
   return (
     <section className="mt-8">
       <div>
-        <h1 className="text-[3rem] font-bold pl-36">Echoes of Success</h1>
+        <h1 className="text-[1.7rem] md:text-[3rem] font-bold md:pl-36 text-center md:text-left">Echoes of Success</h1>
       </div>
-      <div className="flex justify-around mt-8 flex-wrap">
+      <div className="flex justify-around mt-8 flex-wrap md:gap-0 gap-11">
         {reveiewData.map((item, index) => {
           return (
             <div className="flex flex-col items-center gap-2" key={index}>
@@ -35,7 +35,7 @@ function HomeReview() {
                 alt={item.userName}
               />
               <h1 className="text-2xl font-bold">{item.userName}</h1>
-              <p className="w-[20vw] text-right">{item.review}</p>
+              <p className="w-[79vw] md:w-[20vw] text-right">{item.review}</p>
             </div>
           );
         })}

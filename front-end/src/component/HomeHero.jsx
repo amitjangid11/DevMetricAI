@@ -14,14 +14,11 @@ function HomeHero() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `/api/get-subscription-details`,
-          {
-            headers: {
-              Email: decoded.email,
-            },
-          }
-        );
+        const res = await axios.get(`/api/get-subscription-details`, {
+          headers: {
+            Email: decoded.email,
+          },
+        });
 
         let pyStyleString = res.data.result;
 
@@ -70,7 +67,7 @@ function HomeHero() {
   }, [subsubscriptionData]);
 
   return (
-    <section className="bg-[url('/images/Home-hero.avif')] bg-cover bg-center min-h-screen flex justify-center items-center px-4 text-center">
+    <section className=" min-h-screen flex justify-center items-center px-4 text-center">
       <div className="flex flex-col items-center justify-center w-full max-w-4xl gap-6">
         <div className="flex flex-col items-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-md">

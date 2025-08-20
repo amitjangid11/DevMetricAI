@@ -28,8 +28,8 @@ function HomeFeature() {
   return (
     <section className="mt-5">
       <div className="pl-36">
-        <h1 className="text-[3rem] font-bold ">Our Feature</h1>
-        <p className="w-[17vw] font-light italic">
+        <h1 className="text-[1.7rem] md:text-[3rem] font-bold">Our Feature</h1>
+        <p className="w-[35vw] md:w-[25vw] font-light italic">
           AI Meets Your Resume – Unlock Smarter Interview Prep!
         </p>
       </div>
