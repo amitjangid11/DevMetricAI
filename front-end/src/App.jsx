@@ -28,6 +28,7 @@ import ProtectedRoute from "./protected/ProtectedRoute";
 import Result from "./pages/Result";
 import Pricing from "./pages/Pricing";
 import OAuthCallback from "./pages/OAuthCallback";
+import ReasoningAndApptitude from "./pages/ReasoningAndApptitude";
 
 function App() {
   return (
@@ -47,6 +48,17 @@ function App() {
             <Route path="coding-round" element={<ProtectedRoute />}>
               <Route index element={<CodingRound />} />
             </Route>
+            {/* <Route
+              path="reasoning-and-aptitude-round"
+              element={<ProtectedRoute />}
+            >
+              <Route index element={<ReasoningAndApptitude />} />
+            </Route> */}
+            <Route
+              path="reasoning-and-aptitude-round"
+              element={<ReasoningAndApptitude />}
+            />
+
             <Route path="interview-round" element={<ProtectedRoute />}>
               <Route index element={<InterviewRound />} />
             </Route>
