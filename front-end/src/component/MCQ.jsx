@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-function MCQ({ questionNumber, options, totalQ, questions, answer }) {
+function MCQ({
+  questionNumber,
+  options,
+  totalQ,
+  questions,
+  answer,
+  isLoading,
+}) {
   const [searchParams] = useSearchParams();
   const ques = searchParams.get("ques");
   const navigate = useNavigate();
@@ -11,11 +18,13 @@ function MCQ({ questionNumber, options, totalQ, questions, answer }) {
   const selectedOption = answers[ques] ?? null;
 
   useEffect(() => {
-    const filterQuestion = questions.filter((question) => {
-      return question.id === Number(ques);
-    });
+    const filterQuestion =
+      questions.length > 0 &&
+      questions.filter((question) => {
+        return question.id === Number(ques);
+      });
 
-    setQuestion(filterQuestion[0].question);
+    filterQuestion && setQuestion(filterQuestion[0].question);
   }, [questions, ques]);
 
   const handleOption = (e, index) => {
@@ -39,6 +48,10 @@ function MCQ({ questionNumber, options, totalQ, questions, answer }) {
   };
 
   const handleSubmit = () => {};
+
+  if (isLoading) {
+    return <h1 className="text-center">Loading...</h1>;
+  }
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-function ProgressBar({ currentQ, totalQ }) {
+function ProgressBar({ currentQ, totalQ, isLoading }) {
   const progress = (currentQ / totalQ) * 100;
   const [searchParams] = useSearchParams();
   const ques = searchParams.get("ques");
@@ -19,6 +19,10 @@ function ProgressBar({ currentQ, totalQ }) {
 
     return () => clearInterval(interval);
   }, [timeInSecond]);
+
+  if (isLoading) {
+    return <h1 className="text-center">Loading...</h1>;
+  }
 
   function timeFormatter(time) {
     const min = String(Math.floor(time / 60)).padStart(2, "0");
