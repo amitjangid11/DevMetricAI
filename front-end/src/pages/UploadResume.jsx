@@ -30,10 +30,7 @@ export default function UploadResume() {
           email,
           subscriptionTitle,
         };
-        await axios.post(
-          `/api/create-subscription-details`,
-          finalData
-        );
+        await axios.post(`/api/create-subscription-details`, finalData);
       } catch (error) {
         console.log(error);
       }
@@ -51,16 +48,12 @@ export default function UploadResume() {
     try {
       setIsLoading(true);
 
-      const response = await axios.post(
-        `/api/upload-resume`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Email: decoded.email,
-          },
-        }
-      );
+      const response = await axios.post(`/api/upload-resume`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Email: decoded.email,
+        },
+      });
 
       localStorage.setItem("coding_question", response.data.question);
 

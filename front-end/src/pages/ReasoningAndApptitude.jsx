@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import MCQ from "../component/MCQ";
 import ProgressBar from "../component/ProgressBar";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axios";
 import Spinner from "../component/Spinner";
 
 function ReasoningAndApptitude() {

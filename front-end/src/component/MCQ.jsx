@@ -1,3 +1,4 @@
+import axios from "../axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -13,6 +14,7 @@ function MCQ({
   const ques = searchParams.get("ques");
   const navigate = useNavigate();
   const [question, setQuestion] = useState("");
+  const [totalMarks, setTotalMarks] = useState(0);
 
   const [answers, setAnswers] = useState({});
   const selectedOption = answers[ques] ?? null;
@@ -34,9 +36,7 @@ function MCQ({
       [ques]: index,
     });
     if (String(userAnswer) === answer) {
-      console.log("correct");
-    } else {
-      console.log("Wrong");
+      setTotalMarks((prev) => prev + 1);
     }
   };
 
@@ -47,7 +47,12 @@ function MCQ({
     navigate(`?ques=${--questionNumber}`);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    console.log(totalMarks);
+    await axios.post("/api/total-marks-of-aptitude-and-reasoning", {
+      totalMarks,
+    });
+  };
 
   if (isLoading) {
     return <h1 className="text-center">Loading...</h1>;
@@ -84,7 +89,7 @@ function MCQ({
         {ques === "25" ? (
           <button
             className="rounded-[50px] border-2 text-center border-[#152F56] p-3 text-xs w-32 hover:bg-[#152F56] transition-all duration-300 ease-in-out cursor-pointer"
-            onClick={() => handleSubmit()}
+            onClick={handleSubmit}
           >
             Submit
           </button>
