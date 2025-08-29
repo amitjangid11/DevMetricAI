@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import axios from "../axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -10,6 +11,9 @@ function MCQ({
   answer,
   isLoading,
 }) {
+  const userToken = localStorage.getItem("auth_token");
+  const decoded = userToken && jwtDecode(userToken);
+
   const [searchParams] = useSearchParams();
   const ques = searchParams.get("ques");
   const navigate = useNavigate();
@@ -49,9 +53,20 @@ function MCQ({
 
   const handleSubmit = async () => {
     console.log(totalMarks);
-    await axios.post("/api/total-marks-of-aptitude-and-reasoning", {
+    const response = await axios.post(
+      "/api/total-marks-of-aptitude-and-reasoning",
       totalMarks,
-    });
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Email: decoded.email,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      navigate("/app/interview-round");
+    }
   };
 
   if (isLoading) {

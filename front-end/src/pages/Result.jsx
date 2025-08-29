@@ -41,18 +41,17 @@ function Result() {
         const codeEvaluationID = JSON.parse(
           localStorage.getItem("codeEvaluationID")
         );
-        const res = await axios.get(
-          `/api/get-interview-result`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Email: decoded.email,
-              CodeEvaluationID: codeEvaluationID,
-            },
-          }
-        );
+        const res = await axios.get(`/api/get-interview-result`, {
+          headers: {
+            "Content-Type": "application/json",
+            Email: decoded.email,
+            CodeEvaluationID: codeEvaluationID,
+          },
+        });
 
         const result = res.data.result[0];
+
+        console.log("RESULT:", result);
 
         // Parse code review JSON safely
         const codeReviewStr = result.code_review
