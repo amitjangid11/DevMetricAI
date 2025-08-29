@@ -42,14 +42,16 @@ function ReasoningAndApptitude() {
   }, []);
 
   useEffect(() => {
-    const filterQuestion =
-      questions.length > 0 &&
-      questions.filter((question) => {
-        return question.id === Number(ques);
-      });
+    if (!ques || questions.length === 0) return;
 
-    filterQuestion && setOptions(filterQuestion[0].options);
-    filterQuestion && setCorrectAnswer(filterQuestion[0].answer);
+    const filterQuestion = questions.find(
+      (question) => question.id === Number(ques)
+    );
+
+    if (filterQuestion) {
+      setOptions(filterQuestion.options);
+      setCorrectAnswer(filterQuestion.answer);
+    }
   }, [ques, questions]);
 
   if (isLoading) {

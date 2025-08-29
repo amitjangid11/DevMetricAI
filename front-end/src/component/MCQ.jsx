@@ -24,13 +24,15 @@ function MCQ({
   const selectedOption = answers[ques] ?? null;
 
   useEffect(() => {
-    const filterQuestion =
-      questions.length > 0 &&
-      questions.filter((question) => {
-        return question.id === Number(ques);
-      });
+    if (!ques || questions.length === 0) return;
 
-    filterQuestion && setQuestion(filterQuestion[0].question);
+    const foundQuestion = questions.find(
+      (question) => question.id === Number(ques)
+    );
+
+    if (foundQuestion) {
+      setQuestion(foundQuestion.question);
+    }
   }, [questions, ques]);
 
   const handleOption = (e, index) => {
