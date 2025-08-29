@@ -28,6 +28,8 @@ function ReasoningAndApptitude() {
         const questionArray = finalSpilitedResponse[0];
         const finalQuestionArray = JSON.parse(questionArray);
 
+        console.log("from here");
+
         setQuestions(finalQuestionArray);
         setIsLoading(false);
       } catch (error) {
