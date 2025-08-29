@@ -135,7 +135,7 @@ export default function CodingRound() {
 
       setIsLoading(false);
 
-      navigate("/app/reasoning-and-aptitude-round");
+      navigate("/app/reasoning-and-aptitude-round?ques=1");
     }
   }
 
