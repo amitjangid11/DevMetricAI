@@ -35,10 +35,10 @@ const ITJobs = [
   "Other",
 ];
 
-const userToken = localStorage.getItem("auth_token");
-const decoded = userToken && jwtDecode(userToken);
-
 function Profile() {
+  const userToken = localStorage.getItem("auth_token");
+  const decoded = userToken && jwtDecode(userToken);
+  
   const [email, setEmail] = useState(decoded?.email || "");
   const [name, setName] = useState(decoded?.name || "");
   const [image, setImage] = useState(decoded?.picture || "");
