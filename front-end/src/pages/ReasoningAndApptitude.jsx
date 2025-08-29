@@ -19,7 +19,7 @@ function ReasoningAndApptitude() {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          "https://devmetricai-backend.onrender.com/api/generate-aptitude-and-reasoning-questions"
+          "/api/generate-aptitude-and-reasoning-questions"
         );
 
         const initialSpilitedResponse =
