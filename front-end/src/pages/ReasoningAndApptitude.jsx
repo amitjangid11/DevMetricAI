@@ -72,7 +72,6 @@ function ReasoningAndApptitude() {
         answer={correctAnswer}
         totalQ={questions.length}
         questions={questions}
-        isLoading={isLoading}
       />
     </div>
   );

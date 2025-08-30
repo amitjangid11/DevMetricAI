@@ -148,7 +148,7 @@ function Result() {
         <HiBars3BottomRight className="text-3xl cursor-pointer" />
       </div>
       {/* Score summary */}
-      <div className="border-2 border-[#152F56] rounded-[100px] flex flex-col items-center justify-center gap-4 w-full md:w-1/2 m-auto mt-10 p-5">
+      <div className="border-2 border-[#152F56] rounded-[100px] flex flex-col items-center justify-center gap-4 w-[51vw] md:w-1/2 m-auto mt-10 p-5">
         {/* w-full on mobile, half on medium and up */}
         <h1 className="text-3xl md:text-4xl font-semibold text-center">
           You scored {codingScore + interviewScore}/100 ({percentage.toFixed(2)}
@@ -236,7 +236,7 @@ function Result() {
       )}
       {/* Modal */}
       {isModalOpen && selectedQuestion && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 p-4 overflow-auto">
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/20 z-50 p-4">
           <div className="bg-gray-900 p-4 md:p-6 rounded-lg shadow-lg max-w-3xl w-full max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl md:text-2xl font-bold">
@@ -291,8 +291,8 @@ function Result() {
         </div>
       )}
       {isReviewModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 p-4">
-          <div className="bg-gray-900 p-6 rounded-lg shadow-lg max-w-md w-full">
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/20 z-50 p-4">
+          <div className="bg-[#0F0F0F] p-6 rounded-lg shadow-lg max-w-md w-full border border-[#215CB5]">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Rate your experiences</h2>
@@ -324,13 +324,13 @@ function Result() {
               placeholder="Write your thought here"
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
-              className="w-full p-2 border border-gray-600 rounded bg-transparent text-white mb-4"
+              className="w-full p-2 border border-[#215CB5] rounded-[20px] bg-transparent text-[#413F3F] mb-4"
             />
 
             {/* Submit */}
             <button
               onClick={handleSubmitReview}
-              className="border-2 border-[#152F56] rounded-lg px-4 py-2 hover:bg-[#152F56] text-white"
+              className="border-2 border-[#215CB5] rounded-lg px-4 py-2 hover:bg-[#152F56] text-white"
             >
               Submit
             </button>

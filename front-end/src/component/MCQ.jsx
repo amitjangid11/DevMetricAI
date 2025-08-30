@@ -2,15 +2,9 @@ import { jwtDecode } from "jwt-decode";
 import axios from "../axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import Spinner from "./Spinner";
 
-function MCQ({
-  questionNumber,
-  options,
-  totalQ,
-  questions,
-  answer,
-  isLoading,
-}) {
+function MCQ({ questionNumber, options, totalQ, questions, answer }) {
   const userToken = localStorage.getItem("auth_token");
   const decoded = userToken && jwtDecode(userToken);
 
@@ -19,6 +13,7 @@ function MCQ({
   const navigate = useNavigate();
   const [question, setQuestion] = useState("");
   const [totalMarks, setTotalMarks] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [answers, setAnswers] = useState({});
   const selectedOption = answers[ques] ?? null;
@@ -54,25 +49,31 @@ function MCQ({
   };
 
   const handleSubmit = async () => {
-    console.log(totalMarks);
-    const response = await axios.post(
-      "/api/total-marks-of-aptitude-and-reasoning",
-      { totalMarks },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Email: decoded.email,
-        },
-      }
-    );
+    try {
+      setIsLoading(true);
+      console.log(totalMarks);
+      const response = await axios.post(
+        "/api/total-marks-of-aptitude-and-reasoning",
+        { totalMarks },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Email: decoded.email,
+          },
+        }
+      );
 
-    if (response.status === 200) {
-      navigate("/app/interview-round");
+      if (response.status === 200) {
+        setIsLoading(false);
+        navigate("/app/interview-round");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   if (isLoading) {
-    return <h1 className="text-center">Loading...</h1>;
+    return <Spinner message="AI review your response..." />;
   }
 
   return (
