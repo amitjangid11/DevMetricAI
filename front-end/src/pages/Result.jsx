@@ -1,35 +1,32 @@
 import axios from "../axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { HiBars3BottomRight } from "react-icons/hi2";
-import { RxCross1 } from "react-icons/rx";
 import { jwtDecode } from "jwt-decode";
 import Spinner from "../component/Spinner";
 import { Link } from "react-router-dom";
+import ReviewModal from "../component/ReviewModal";
+import CodeReviewModal from "../component/CodeReviewModal";
+import SidebarCodindQuestion from "../component/SidebarCodindQuestion";
 
 function Result() {
   const userToken = localStorage.getItem("auth_token");
   const decoded = userToken && jwtDecode(userToken);
+
   const [openAnswer, setOpenAnswer] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
   const [codingScore, setCodingScore] = useState(0);
   const [interviewScore, setInterviewScore] = useState(0);
   const [aptitudeAndReasoningScore, setAptitudeAndReasoningScore] = useState(0);
   const [aptitudeAndReasoningOverview, setAptitudeAndReasoningOverview] =
     useState("");
+
   const [isLoading, setIsLoading] = useState(false);
   const [questions, setQuestions] = useState(null);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [domain, setDomain] = useState("");
   const [codeEvaluations, setCodeEvaluations] = useState([]); // Holds parsed evaluations
-
-  const [rating, setRating] = useState(0);
-  const [reviewText, setReviewText] = useState("");
-
-  const handleSubmitReview = () => {
-    console.log("Review submitted:", { rating, reviewText, selectedQuestion });
-    setIsReviewModalOpen(false);
-  };
 
   useEffect(() => {
     const data = localStorage.getItem("coding_question");
@@ -172,7 +169,7 @@ function Result() {
         </Link>
 
         <button
-          className="border-2 border-[#152F56] rounded-[50px] p-3 md:p-4 w-40 md:w-44 hover:cursor-pointer hover:bg-[#152F56] text-white transition-all"
+          className="border-2 border-[#152F56] rounded-[50px] p-3 md:p-4 w-48 md:w-44 hover:cursor-pointer hover:bg-[#152F56] text-white transition-all"
           onClick={(e) => {
             e.stopPropagation();
             setIsReviewModalOpen(true);
@@ -183,148 +180,24 @@ function Result() {
       </div>
       {/* Sidebar */}
       {openAnswer && (
-        <div className="fixed md:absolute top-0 right-0 h-full md:w-1/2 w-full bg-slate-900 z-50">
-          <div
-            className="flex justify-end p-4"
-            onClick={() => setOpenAnswer(false)}
-          >
-            <RxCross1 className="text-3xl cursor-pointer" />
-          </div>
-
-          <div className="p-3 h-[80vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-4">
-              Detailed Review Of Your Answers
-            </h2>
-            <div className="space-y-4">
-              {questions?.map((q) => (
-                <div
-                  key={q.id}
-                  className={`p-4 rounded-lg cursor-pointer transition hover:bg-slate-800 ${
-                    selectedQuestion?.id === q.id &&
-                    "border-[#0C1A31] bg-slate-800"
-                  }`}
-                  onClick={() => setSelectedQuestion(q)}
-                >
-                  <h3 className="text-lg font-semibold">{q.title}</h3>
-                  <p className="text-sm text-gray-300">{q.description}</p>
-                  <button
-                    className="mt-2 text-[#2d7af5] hover:underline"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsModalOpen(true);
-                      setSelectedQuestion(q);
-                    }}
-                  >
-                    View Details
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <SidebarCodindQuestion
+          setOpenAnswer={setOpenAnswer}
+          questions={questions}
+          selectedQuestion={selectedQuestion}
+          setSelectedQuestion={setSelectedQuestion}
+          setIsModalOpen={setIsModalOpen}
+        />
       )}
       {/* Modal */}
       {isModalOpen && selectedQuestion && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/20 z-50 p-4">
-          <div className="bg-gray-900 p-4 md:p-6 rounded-lg shadow-lg max-w-3xl w-full max-h-[80vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl md:text-2xl font-bold">
-                {selectedQuestion.title} - Review Details
-              </h2>
-              <button
-                className="text-white text-3xl md:text-2xl font-bold leading-none"
-                onClick={() => setIsModalOpen(false)}
-                aria-label="Close modal"
-              >
-                &times;
-              </button>
-            </div>
-
-            {/* User Code */}
-            <div className="mb-4">
-              <h3 className="font-semibold mb-2">Your Code:</h3>
-              <pre className="bg-black p-4 rounded text-xs md:text-sm overflow-x-auto whitespace-pre-wrap max-w-full">
-                {selectedEvaluation?.userCode || "No code available"}
-              </pre>
-            </div>
-
-            {/* Score & Feedback */}
-            <div className="mb-4">
-              <h3 className="font-semibold">Score:</h3>
-              <p>{selectedEvaluation?.score ?? "N/A"}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">Capability:</h3>
-              <p className="font-semibold">
-                {selectedEvaluation?.capability ?? "N/A"}
-              </p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">Potential Errors:</h3>
-              <p className="font-semibold">
-                {selectedEvaluation?.potentialErrors ?? "N/A"}
-              </p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">Feedback:</h3>
-              <p>{selectedEvaluation?.feedback || "No comments provided."}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">Improvement:</h3>
-              <p>
-                {selectedEvaluation?.improvements ||
-                  "No improvements provided."}
-              </p>
-            </div>
-          </div>
-        </div>
+        <CodeReviewModal
+          selectedQuestion={selectedQuestion}
+          setIsModalOpen={setIsModalOpen}
+          selectedEvaluation={selectedEvaluation}
+        />
       )}
       {isReviewModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/20 z-50 p-4">
-          <div className="bg-[#0F0F0F] p-6 rounded-lg shadow-lg max-w-md w-full border border-[#152F56]">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Rate your experiences</h2>
-              <button
-                className="text-white text-2xl font-bold leading-none cursor-pointer"
-                onClick={() => setIsReviewModalOpen(false)}
-              >
-                &times;
-              </button>
-            </div>
-
-            {/* Stars */}
-            <div className="flex gap-2 mb-4">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  onClick={() => setRating(star)}
-                  className={`cursor-pointer text-2xl ${
-                    rating >= star ? "text-yellow-400" : "text-gray-500"
-                  }`}
-                >
-                  ★
-                </span>
-              ))}
-            </div>
-
-            {/* Textarea */}
-            <textarea
-              placeholder="Write your thought here"
-              value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
-              className="w-full p-3 border border-[#152F56] rounded-[10px] bg-transparent text-[#413F3F] mb-4"
-            />
-
-            {/* Submit */}
-            <button
-              onClick={handleSubmitReview}
-              className="border-2 border-[#152F56] rounded-lg px-4 py-2 hover:bg-[#152F56] text-white"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
+        <ReviewModal setIsReviewModalOpen={setIsReviewModalOpen} />
       )}
     </div>
   );
