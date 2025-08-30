@@ -175,7 +175,7 @@ function Result() {
         </div>
       </div>
       {/* Profile Button */}
-      <div className="flex justify-center items-center mt-10">
+      <div className="flex justify-center gap-3 items-center mt-10">
         <Link to="/app/profile/previous-interview">
           <button className="border-2 border-[#152F56] rounded-[50px] p-3 md:p-4 w-40 md:w-44 hover:cursor-pointer hover:bg-[#152F56] text-white transition-all">
             View Profile
@@ -183,7 +183,7 @@ function Result() {
         </Link>
 
         <button
-          className="mt-2 text-[#2d7af5] hover:underline"
+          className="border-2 border-[#152F56] rounded-[50px] p-3 md:p-4 w-40 md:w-44 hover:cursor-pointer hover:bg-[#152F56] text-white transition-all"
           onClick={(e) => {
             e.stopPropagation();
             setIsReviewModalOpen(true);
@@ -292,12 +292,12 @@ function Result() {
       )}
       {isReviewModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/20 z-50 p-4">
-          <div className="bg-[#0F0F0F] p-6 rounded-lg shadow-lg max-w-md w-full border border-[#215CB5]">
+          <div className="bg-[#0F0F0F] p-6 rounded-lg shadow-lg max-w-md w-full border border-[#152F56]">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Rate your experiences</h2>
               <button
-                className="text-white text-2xl font-bold leading-none"
+                className="text-white text-2xl font-bold leading-none cursor-pointer"
                 onClick={() => setIsReviewModalOpen(false)}
               >
                 &times;
@@ -324,13 +324,13 @@ function Result() {
               placeholder="Write your thought here"
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
-              className="w-full p-2 border border-[#215CB5] rounded-[20px] bg-transparent text-[#413F3F] mb-4"
+              className="w-full p-3 border border-[#152F56] rounded-[10px] bg-transparent text-[#413F3F] mb-4"
             />
 
             {/* Submit */}
             <button
               onClick={handleSubmitReview}
-              className="border-2 border-[#215CB5] rounded-lg px-4 py-2 hover:bg-[#152F56] text-white"
+              className="border-2 border-[#152F56] rounded-lg px-4 py-2 hover:bg-[#152F56] text-white"
             >
               Submit
             </button>

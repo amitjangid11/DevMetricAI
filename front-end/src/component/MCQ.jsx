@@ -8,6 +8,8 @@ function MCQ({ questionNumber, options, totalQ, questions, answer }) {
   const userToken = localStorage.getItem("auth_token");
   const decoded = userToken && jwtDecode(userToken);
 
+  const codeEvaluationID = localStorage.getItem("codeEvaluationID");
+
   const [searchParams] = useSearchParams();
   const ques = searchParams.get("ques");
   const navigate = useNavigate();
@@ -59,6 +61,7 @@ function MCQ({ questionNumber, options, totalQ, questions, answer }) {
           headers: {
             "Content-Type": "application/json",
             Email: decoded.email,
+            CodeEvaluationID: codeEvaluationID,
           },
         }
       );
