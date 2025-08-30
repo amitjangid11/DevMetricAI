@@ -1,12 +1,23 @@
 import { useState } from "react";
+import axios from "../axios";
+import toast from "react-hot-toast";
 
 function ReviewModal({ setIsReviewModalOpen }) {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = async () => {
     console.log("Review submitted:", { rating, reviewText });
     setIsReviewModalOpen(false);
+
+    const response = await axios.post("/api/review", {
+      rating,
+      reviewText,
+    });
+
+    if (response.status === 200) {
+      toast.success("☑️ Review Submitted Successfully");
+    }
   };
 
   return (
