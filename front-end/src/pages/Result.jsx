@@ -6,19 +6,41 @@ import { jwtDecode } from "jwt-decode";
 import Spinner from "../component/Spinner";
 import { Link } from "react-router-dom";
 
+// reasoning_and_aptitude_review
+// :
+// overview
+// :
+// "Below average – keep practicing to improve."
+// totalMarks
+// :
+// 10
+// [[
+
 const userToken = localStorage.getItem("auth_token");
 const decoded = userToken && jwtDecode(userToken);
 
 function Result() {
   const [openAnswer, setOpenAnswer] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [codingScore, setCodingScore] = useState(0);
   const [interviewScore, setInterviewScore] = useState(0);
+  const [aptitudeAndReasoningScore, setAptitudeAndReasoningScore] = useState(0);
+  const [aptitudeAndReasoningOverview, setAptitudeAndReasoningOverview] =
+    useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [questions, setQuestions] = useState(null);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [domain, setDomain] = useState("");
   const [codeEvaluations, setCodeEvaluations] = useState([]); // Holds parsed evaluations
+
+  const [rating, setRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+
+  const handleSubmitReview = () => {
+    console.log("Review submitted:", { rating, reviewText, selectedQuestion });
+    setIsReviewModalOpen(false);
+  };
 
   useEffect(() => {
     const data = localStorage.getItem("coding_question");
@@ -89,6 +111,13 @@ function Result() {
         }
         setInterviewScore(interviewReviewObject?.TotalMarks || 0);
 
+        setAptitudeAndReasoningScore(
+          result.reasoning_and_aptitude_review.totalMarks
+        );
+        setAptitudeAndReasoningOverview(
+          result.reasoning_and_aptitude_review.overview
+        );
+
         setDomain(result.role);
         setIsLoading(false);
       } catch (error) {
@@ -135,6 +164,11 @@ function Result() {
             <p>{codingScore}/50</p>
           </div>
           <div className="text-center border-2 border-[#152F56] rounded-[50px] w-40 md:w-44 flex justify-center items-center flex-col p-3">
+            <h1 className="font-semibold">Aptitude and Reasoning Score</h1>
+            <p>{aptitudeAndReasoningOverview}</p>
+            <p>{aptitudeAndReasoningScore}/50</p>
+          </div>
+          <div className="text-center border-2 border-[#152F56] rounded-[50px] w-40 md:w-44 flex justify-center items-center flex-col p-3">
             <h1 className="font-semibold">Interview Score</h1>
             <p>{interviewScore}/50</p>
           </div>
@@ -147,6 +181,16 @@ function Result() {
             View Profile
           </button>
         </Link>
+
+        <button
+          className="mt-2 text-[#2d7af5] hover:underline"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsReviewModalOpen(true);
+          }}
+        >
+          Rate your experience
+        </button>
       </div>
       {/* Sidebar */}
       {openAnswer && (
@@ -243,6 +287,53 @@ function Result() {
                   "No improvements provided."}
               </p>
             </div>
+          </div>
+        </div>
+      )}
+      {isReviewModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 p-4">
+          <div className="bg-gray-900 p-6 rounded-lg shadow-lg max-w-md w-full">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Rate your experiences</h2>
+              <button
+                className="text-white text-2xl font-bold leading-none"
+                onClick={() => setIsReviewModalOpen(false)}
+              >
+                &times;
+              </button>
+            </div>
+
+            {/* Stars */}
+            <div className="flex gap-2 mb-4">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  onClick={() => setRating(star)}
+                  className={`cursor-pointer text-2xl ${
+                    rating >= star ? "text-yellow-400" : "text-gray-500"
+                  }`}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+
+            {/* Textarea */}
+            <textarea
+              placeholder="Write your thought here"
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              className="w-full p-2 border border-gray-600 rounded bg-transparent text-white mb-4"
+            />
+
+            {/* Submit */}
+            <button
+              onClick={handleSubmitReview}
+              className="border-2 border-[#152F56] rounded-lg px-4 py-2 hover:bg-[#152F56] text-white"
+            >
+              Submit
+            </button>
           </div>
         </div>
       )}
