@@ -57,7 +57,7 @@ function MCQ({
     console.log(totalMarks);
     const response = await axios.post(
       "/api/total-marks-of-aptitude-and-reasoning",
-      totalMarks,
+      { totalMarks },
       {
         headers: {
           "Content-Type": "application/json",

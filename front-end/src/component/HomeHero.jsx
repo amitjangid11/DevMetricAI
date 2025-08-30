@@ -4,10 +4,10 @@ import axios from "../axios";
 import toast from "react-hot-toast";
 import { jwtDecode } from "jwt-decode";
 
-const userToken = localStorage.getItem("auth_token");
-const decoded = userToken && jwtDecode(userToken);
-
 function HomeHero() {
+  const userToken = localStorage.getItem("auth_token");
+  const decoded = userToken && jwtDecode(userToken);
+
   const [subsubscriptionData, setSubsubscriptionData] = useState({});
   const [toLink, setToLink] = useState("");
 
@@ -22,7 +22,6 @@ function HomeHero() {
 
         let pyStyleString = res.data.result;
 
-        // Fix the Python-style keys/values:
         let fixed = pyStyleString
           .replace(/None/g, "null") // Python None -> JS null
           .replace(/'/g, '"'); // Single quotes to double quotes
@@ -77,7 +76,12 @@ function HomeHero() {
             Upload your resume & get real-time AI-driven interview questions
           </p>
         </div>
-        <Link to={toLink || "/app/pricing"}>
+        {/* <Link to={toLink || "/app/pricing"}>
+          <button className="bg-white text-[#152F56] font-semibold w-40 py-3 rounded-full hover:bg-gray-200 transition-all duration-300 cursor-pointer">
+            Upload Resume
+          </button>
+        </Link> */}
+        <Link to="/app/upload-resume">
           <button className="bg-white text-[#152F56] font-semibold w-40 py-3 rounded-full hover:bg-gray-200 transition-all duration-300 cursor-pointer">
             Upload Resume
           </button>

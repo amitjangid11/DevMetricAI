@@ -213,7 +213,7 @@ export default function CodingRound() {
               {questions?.length} Questions
             </h2>
             <h2 className="md:text-2xl font-bold mb-4">
-              Total: {questions?.length * 10} marks
+              Total: {questions?.length * 5} marks
             </h2>
           </div>
           <div className="space-y-4">
@@ -229,7 +229,7 @@ export default function CodingRound() {
                 <h3 className="text-lg font-semibold">{q.title}</h3>
                 <p className="text-sm text-gray-300">{q.description}</p>
                 <h3 className="text-lg font-semibold">
-                  {(questions?.length * 10) / questions.length} mark each
+                  {(questions?.length * 5) / questions.length} mark each
                 </h3>
                 <button
                   className="mt-2 text-[#2d7af5] hover:underline"
