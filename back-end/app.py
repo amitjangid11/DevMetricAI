@@ -714,6 +714,7 @@ def total_marks():
     email = request.headers.get("Email")
     codeEvaluationID = request.headers.get("CodeEvaluationID")
 
+
     if not data:
         return jsonify({"error": "No JSON data received"}), 400
 

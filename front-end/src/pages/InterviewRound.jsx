@@ -5,10 +5,10 @@ import { jwtDecode } from "jwt-decode";
 import { CiWarning } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
-const userToken = localStorage.getItem("auth_token");
-const decoded = userToken && jwtDecode(userToken);
-
 function InterviewRound() {
+  const userToken = localStorage.getItem("auth_token");
+  const decoded = userToken && jwtDecode(userToken);
+  const codeEvaluationID = JSON.parse(localStorage.getItem("codeEvaluationID"));
   const [text, setText] = useState([]);
   const [userResponse, setUserResponse] = useState("");
   const [conversationLog, setConversationLog] = useState([]);
@@ -17,17 +17,14 @@ function InterviewRound() {
 
   async function handleSpeechSubmition(text) {
     try {
-      const res = await axios.post(
-        `/api/generate-interview-question`,
-        text,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Email: decoded.email,
-            StopInterview: "true",
-          },
-        }
-      );
+      const res = await axios.post(`/api/generate-interview-question`, text, {
+        headers: {
+          "Content-Type": "application/json",
+          Email: decoded.email,
+          StopInterview: "true",
+          CodeEvaluationID: codeEvaluationID,
+        },
+      });
       setText(res.data.question);
       setConversationLog((prevLog) => [
         ...prevLog,
@@ -60,17 +57,14 @@ function InterviewRound() {
     setStopInterview(bool);
 
     try {
-      await axios.post(
-        `/api/generate-interview-question`,
-        text,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Email: decoded.email,
-            StopInterview: bool,
-          },
-        }
-      );
+      await axios.post(`/api/generate-interview-question`, text, {
+        headers: {
+          "Content-Type": "application/json",
+          Email: decoded.email,
+          StopInterview: bool,
+          CodeEvaluationID: codeEvaluationID,
+        },
+      });
 
       navigate("/app/result");
     } catch (error) {

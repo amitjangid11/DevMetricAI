@@ -6,20 +6,9 @@ import { jwtDecode } from "jwt-decode";
 import Spinner from "../component/Spinner";
 import { Link } from "react-router-dom";
 
-// reasoning_and_aptitude_review
-// :
-// overview
-// :
-// "Below average – keep practicing to improve."
-// totalMarks
-// :
-// 10
-// [[
-
-const userToken = localStorage.getItem("auth_token");
-const decoded = userToken && jwtDecode(userToken);
-
 function Result() {
+  const userToken = localStorage.getItem("auth_token");
+  const decoded = userToken && jwtDecode(userToken);
   const [openAnswer, setOpenAnswer] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);

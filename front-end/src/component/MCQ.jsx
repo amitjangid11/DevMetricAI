@@ -8,7 +8,7 @@ function MCQ({ questionNumber, options, totalQ, questions, answer }) {
   const userToken = localStorage.getItem("auth_token");
   const decoded = userToken && jwtDecode(userToken);
 
-  const codeEvaluationID = localStorage.getItem("codeEvaluationID");
+  const codeEvaluationID = JSON.parse(localStorage.getItem("codeEvaluationID"));
 
   const [searchParams] = useSearchParams();
   const ques = searchParams.get("ques");
