@@ -48,9 +48,9 @@ export default function CodingRound() {
 
   useEffect(() => {
     const data = localStorage.getItem("coding_question");
-    const splitedQuestions = data && data.split("```");
+    const splitedQuestions = data && data.split("```json");
     const finalQuestions =
-      splitedQuestions && JSON.parse(splitedQuestions[1].split("json")[1]);
+      splitedQuestions && JSON.parse(splitedQuestions[1].split("```")[0]);
 
     setQuestions(finalQuestions);
     setSelectedQuestion(finalQuestions[0]);
