@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "../axios";
 import { useEffect, useState } from "react";
 import { IoIosSend } from "react-icons/io";
+import Spinner from "../component/Spinner";
 
 function DevCredits() {
   const userToken = localStorage.getItem("auth_token");
@@ -24,7 +25,6 @@ function DevCredits() {
         );
 
         if (response.status === 200) {
-          console.log(response.data);
           setTotalCredits(response.data.credits);
         }
       } catch (error) {
