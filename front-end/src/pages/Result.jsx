@@ -119,40 +119,27 @@ function Result() {
   }, []);
 
   useEffect(() => {
-    const totalMarks = codingScore + aptitudeAndReasoningScore + interviewScore;
+    // make sure all scores are set (not undefined/null)
+    if (
+      codingScore !== undefined &&
+      aptitudeAndReasoningScore !== undefined &&
+      interviewScore !== undefined
+    ) {
+      const totalMarks =
+        codingScore + aptitudeAndReasoningScore + interviewScore;
 
-    if (totalMarks > 0) {
-      const credit = creditGenerator(totalMarks);
-      setCredits(credit);
+      if (totalMarks > 0) {
+        const credit = creditGenerator(totalMarks);
+        setCredits(credit);
 
-      toast.success(
-        `Congrats! You scored ${totalMarks} marks and earned ${credit} DevCredits worth ₹${
-          credit * 5
-        } 🎉`
-      );
+        toast.success(
+          `Congrats! You scored ${totalMarks} marks and earned ${credit} DevCredits worth ₹${
+            credit * 5
+          } 🎉`
+        );
+      }
     }
   }, [codingScore, aptitudeAndReasoningScore, interviewScore]);
-
-  //   {
-  //   userId: "64df9f...",  // from JWT
-  //   email: "john@example.com",
-  //   name: "John Doe",
-  //   credits: 27,          // total available credits
-  //   history: [            // optional, but great for tracking
-  //     {
-  //       type: "earned",   // or "spent"
-  //       credits: 12,
-  //       reason: "Interview Score",
-  //       date: new Date()
-  //     },
-  //     {
-  //       type: "spent",
-  //       credits: -5,
-  //       reason: "Used for Mock Test",
-  //       date: new Date()
-  //     }
-  //   ]
-  // }
 
   useEffect(() => {
     const sendCredits = async () => {

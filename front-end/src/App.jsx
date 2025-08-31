@@ -29,6 +29,7 @@ import Result from "./pages/Result";
 import Pricing from "./pages/Pricing";
 import OAuthCallback from "./pages/OAuthCallback";
 import ReasoningAndApptitude from "./pages/ReasoningAndApptitude";
+import DevCredits from "./pages/DevCredits";
 
 function App() {
   return (
@@ -81,6 +82,7 @@ function App() {
                   element={<PreviousInterview />}
                 />
                 <Route path="performance" element={<UserPerformance />} />
+                <Route path="devcredits" element={<DevCredits />} />
                 <Route path="suggestions" element={<Suggestions />}>
                   <Route index element={<Navigate replace to="article" />} />
                   <Route path="article" element={<Article />} />

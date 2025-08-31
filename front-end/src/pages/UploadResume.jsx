@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "../component/Spinner";
 import { jwtDecode } from "jwt-decode";
 
-const userToken = localStorage.getItem("auth_token");
-const decoded = userToken && jwtDecode(userToken);
-
-const subscriptionTitle = localStorage.getItem("subscriptionTitle");
-
 export default function UploadResume() {
+  const userToken = localStorage.getItem("auth_token");
+  const decoded = userToken && jwtDecode(userToken);
+
+  const subscriptionTitle = localStorage.getItem("subscriptionTitle");
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const navigate = useNavigate();

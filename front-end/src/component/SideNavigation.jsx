@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FaRegUser } from "react-icons/fa";
+import { FaRegUser, FaViacoin } from "react-icons/fa";
 import { VscPreview } from "react-icons/vsc";
 import { GrDocumentPerformance } from "react-icons/gr";
 import { HiSparkles } from "react-icons/hi2";
@@ -28,6 +28,11 @@ const sideLink = [
     icon: <HiSparkles />,
     text: "Suggestions",
     link: "/app/profile/suggestions",
+  },
+  {
+    icon: <FaViacoin />,
+    text: "Your DevCredits",
+    link: "/app/profile/devcredits",
   },
   {
     icon: <IoIosNotificationsOutline />,
@@ -64,7 +69,11 @@ function SideNavigation() {
         className={`
           fixed h-full border-r border-[#152F56] w-64
           transform transition-transform duration-300 ease-in-out
-          ${showHamburger ? "translate-x-0 bg-white text-black" : "-translate-x-full"} 
+          ${
+            showHamburger
+              ? "translate-x-0 bg-white text-black"
+              : "-translate-x-full"
+          } 
           md:translate-x-0
           z-40
         `}
