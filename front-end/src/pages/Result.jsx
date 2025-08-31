@@ -125,13 +125,11 @@ function Result() {
       const credit = creditGenerator(totalMarks);
       setCredits(credit);
 
-      if (codingScore && aptitudeAndReasoningScore && interviewScore) {
-        toast.success(
-          `Congrats! You scored ${totalMarks} marks and earned ${credit} DevCredits worth ₹${
-            credit * 5
-          } 🎉`
-        );
-      }
+      toast.success(
+        `Congrats! You scored ${totalMarks} marks and earned ${credit} DevCredits worth ₹${
+          credit * 5
+        } 🎉`
+      );
     }
   }, [codingScore, aptitudeAndReasoningScore, interviewScore]);
 
@@ -224,7 +222,6 @@ function Result() {
           </div>
           <div className="text-center border-2 border-[#152F56] rounded-[50px] w-40 md:w-44 flex justify-center items-center flex-col p-3">
             <h1 className="font-semibold">Aptitude and Reasoning Score</h1>
-            <p>{aptitudeAndReasoningOverview}</p>
             <p>{aptitudeAndReasoningScore}/50</p>
           </div>
           <div className="text-center border-2 border-[#152F56] rounded-[50px] w-40 md:w-44 flex justify-center items-center flex-col p-3">

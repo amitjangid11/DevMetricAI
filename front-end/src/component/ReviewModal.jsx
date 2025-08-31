@@ -16,7 +16,7 @@ function ReviewModal({ setIsReviewModalOpen }) {
     });
 
     if (response.status === 200) {
-      toast.success("☑️ Review Submitted Successfully");
+      toast.success("Review Submitted Successfully");
     }
   };
 
