@@ -1,5 +1,5 @@
 import axios from "../axios";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { jwtDecode } from "jwt-decode";
 import Spinner from "../component/Spinner";
@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import ReviewModal from "../component/ReviewModal";
 import CodeReviewModal from "../component/CodeReviewModal";
 import SidebarCodindQuestion from "../component/SidebarCodindQuestion";
+import { creditGenerator } from "../../utils/creditGenerator";
+import toast from "react-hot-toast";
 
 function Result() {
   const userToken = localStorage.getItem("auth_token");
@@ -27,6 +29,7 @@ function Result() {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [domain, setDomain] = useState("");
   const [codeEvaluations, setCodeEvaluations] = useState([]); // Holds parsed evaluations
+  const [credits, setCredits] = useState(0);
 
   useEffect(() => {
     const data = localStorage.getItem("coding_question");
@@ -115,6 +118,75 @@ function Result() {
     fetchResult();
   }, []);
 
+  useEffect(() => {
+    const totalMarks = codingScore + aptitudeAndReasoningScore + interviewScore;
+
+    if (totalMarks > 0) {
+      const credit = creditGenerator(totalMarks);
+      setCredits(credit);
+
+      if (codingScore && aptitudeAndReasoningScore && interviewScore) {
+        toast.success(
+          `Congrats! You scored ${totalMarks} marks and earned ${credit} DevCredits worth ₹${
+            credit * 5
+          } 🎉`
+        );
+      }
+    }
+  }, [codingScore, aptitudeAndReasoningScore, interviewScore]);
+
+  //   {
+  //   userId: "64df9f...",  // from JWT
+  //   email: "john@example.com",
+  //   name: "John Doe",
+  //   credits: 27,          // total available credits
+  //   history: [            // optional, but great for tracking
+  //     {
+  //       type: "earned",   // or "spent"
+  //       credits: 12,
+  //       reason: "Interview Score",
+  //       date: new Date()
+  //     },
+  //     {
+  //       type: "spent",
+  //       credits: -5,
+  //       reason: "Used for Mock Test",
+  //       date: new Date()
+  //     }
+  //   ]
+  // }
+
+  useEffect(() => {
+    const sendCredits = async () => {
+      try {
+        if (credits > 0) {
+          await axios.post(
+            "/api/create-update-credits",
+            {
+              name: decoded.name,
+              email: decoded.email,
+              credits,
+              history: {
+                type: "earned",
+                credits: credits,
+                reason: "Interview Score",
+                date: new Date(),
+              },
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    sendCredits();
+  }, [credits, decoded]);
+
   const percentage = ((codingScore + interviewScore) / 100) * 100;
 
   if (isLoading) return <Spinner message="Evaluating..." />;
@@ -137,7 +209,8 @@ function Result() {
       <div className="border-2 border-[#152F56] rounded-[100px] flex flex-col items-center justify-center gap-4 w-[51vw] md:w-1/2 m-auto mt-10 p-5">
         {/* w-full on mobile, half on medium and up */}
         <h1 className="text-3xl md:text-4xl font-semibold text-center">
-          You scored {codingScore + interviewScore}/100 ({percentage.toFixed(2)}
+          You scored {codingScore + aptitudeAndReasoningScore + interviewScore}
+          /100 ({percentage.toFixed(2)}
           %)
         </h1>
         <div className="flex flex-wrap justify-center gap-3">
