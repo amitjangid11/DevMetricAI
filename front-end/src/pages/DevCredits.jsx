@@ -11,12 +11,18 @@ function DevCredits() {
   useEffect(() => {
     const fetchCredits = async () => {
       try {
-        const response = await axios.get("/api/get-candidate-credits", {
-          headers: {
-            "Content-Type": "application/json",
+        const response = await axios.post(
+          "/api/get-candidate-credits",
+          {
             email: decoded.email,
           },
-        });
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
         if (response.status === 200) {
           console.log(response.data);
           setTotalCredits(response.data.credits);
