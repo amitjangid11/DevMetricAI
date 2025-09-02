@@ -38,6 +38,7 @@ export default function CodingRound() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [warning, setWarning] = useState("");
+  const [countTabSwitch, setCountTabSwitch] = useState(0);
   const videoRef = useRef();
 
   const extension = events.content({
@@ -116,17 +117,13 @@ export default function CodingRound() {
   async function handleSubmitCode() {
     if (questions.length === allCode.length) {
       setIsLoading(true);
-      const res = await axios.post(
-        `/api/review-codes`,
-        allCode,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Email: decoded.email,
-            Role: decoded.role,
-          },
-        }
-      );
+      const res = await axios.post(`/api/review-codes`, allCode, {
+        headers: {
+          "Content-Type": "application/json",
+          Email: decoded.email,
+          Role: decoded.role,
+        },
+      });
 
       // 67ea5e2886e4c5fa8da2a75f
       // 67ea6098e1d3d94a269e7b21
@@ -139,15 +136,113 @@ export default function CodingRound() {
     }
   }
 
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setCountTabSwitch((prev) => prev + 1);
+        setIsCheating(true);
+        setWarning("🚨 Tab switching detected!");
+      }
+
+      if (countTabSwitch === 1) {
+        alert("First warning");
+      }
+      if (countTabSwitch === 2) {
+        alert("second and last warning");
+      }
+      if (countTabSwitch === 3) {
+        alert("done 🚫");
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [countTabSwitch]);
+
+  useEffect(() => {
+    async function loadModel() {
+      const model = await faceLandmarksDetection.load(
+        faceLandmarksDetection.SupportedPackages.mediapipeFacemesh
+      );
+      if (videoRef.current) {
+        const detect = async () => {
+          const predictions = await model.estimateFaces({
+            input: videoRef.current,
+          });
+          if (predictions.length > 1) {
+            setIsCheating(true);
+            setWarning("🚨 Multiple faces detected!");
+          }
+          requestAnimationFrame(detect);
+        };
+        detect();
+      }
+    }
+
+    if (videoRef.current) {
+      navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        videoRef.current.srcObject = stream;
+        loadModel();
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    let lastFaceBox = null;
+    let idleTimer = null;
+
+    async function trackFaceMovement() {
+      const model = await faceLandmarksDetection.load(
+        faceLandmarksDetection.SupportedPackages.mediapipeFacemesh
+      );
+
+      const detect = async () => {
+        if (videoRef.current) {
+          const predictions = await model.estimateFaces({
+            input: videoRef.current,
+          });
+
+          if (predictions.length === 1) {
+            const faceBox = predictions[0].boundingBox;
+            if (lastFaceBox) {
+              const dx = Math.abs(faceBox.topLeft[0] - lastFaceBox.topLeft[0]);
+              const dy = Math.abs(faceBox.topLeft[1] - lastFaceBox.topLeft[1]);
+
+              if (dx < 10 && dy < 10) {
+                // not moving
+                if (!idleTimer) {
+                  idleTimer = setTimeout(() => {
+                    setIsCheating(true);
+                    setWarning("🚨 No head movement detected for too long!");
+                  }, 15000); // 15s idle limit
+                }
+              } else {
+                clearTimeout(idleTimer);
+                idleTimer = null;
+              }
+            }
+            lastFaceBox = faceBox;
+          }
+        }
+        requestAnimationFrame(detect);
+      };
+      detect();
+    }
+
+    trackFaceMovement();
+  }, []);
+
   if (isLoading) return <Spinner message="Ai Review Your Code..." />;
 
   return (
     <>
-      {isCheating && (
+      {/* {isCheating && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-700 text-white px-6 py-3 rounded-lg shadow-lg">
           ⚠️ {warning}
         </div>
-      )}
+      )} */}
 
       <div
         className={`min-h-screen bg-black text-white p-8 flex flex-col md:flex-row gap-8 ${

@@ -30,6 +30,10 @@ import Pricing from "./pages/Pricing";
 import OAuthCallback from "./pages/OAuthCallback";
 import ReasoningAndApptitude from "./pages/ReasoningAndApptitude";
 import DevCredits from "./pages/DevCredits";
+import Leaderboard from "./pages/Leaderboard";
+import ChooseBeforeLogin from "./pages/ChooseBeforeLogin";
+import CompanyRegister from "./pages/CompanyRegister";
+import EmailVerification from "./pages/EmailVerification";
 
 function App() {
   return (
@@ -43,6 +47,8 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="startInterview" element={<StartInterview />} />
+            <Route path="leaderboard" element={<Leaderboard />} />
+
             <Route path="upload-resume" element={<ProtectedRoute />}>
               <Route index element={<UploadResume />} />
             </Route>
@@ -93,9 +99,12 @@ function App() {
               </Route>
             </Route>
           </Route>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/oauth-callback" element={<OAuthCallback />} />
+          <Route path="signin" element={<SignIn />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route path="choose-your-type" element={<ChooseBeforeLogin />} />
+          <Route path="company/register" element={<CompanyRegister />} />
+          <Route path="verify-email" element={<EmailVerification />} />
+          <Route path="oauth-callback" element={<OAuthCallback />} />
         </Routes>
       </Router>
       <Toaster
