@@ -9,7 +9,7 @@ const listItem = [
   { path: "/", name: "Home" },
   { path: "/app/about", name: "About" },
   { path: "/app/startInterview", name: "Start Interview" },
-  { path: "/app/leaderboard", name: "Leaderboard" },
+  { path: "/app/leaderboard?range=today", name: "Leaderboard" },
   { path: "/app/contact", name: "Contact" },
 ];
 

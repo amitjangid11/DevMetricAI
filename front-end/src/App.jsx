@@ -34,6 +34,12 @@ import Leaderboard from "./pages/Leaderboard";
 import ChooseBeforeLogin from "./pages/ChooseBeforeLogin";
 import CompanyRegister from "./pages/CompanyRegister";
 import EmailVerification from "./pages/EmailVerification";
+import CompanyOverview from "./pages/CompanyOverview";
+import CompanyDashboard from "./pages/CompanyDashboard";
+import CandidateFiltering from "./pages/CandidateFiltering";
+import JobPosting from "./pages/JobPosting";
+import Settings from "./pages/Settings";
+import FilteredCandidateProfile from "./pages/FilteredCandidateProfile";
 
 function App() {
   return (
@@ -96,6 +102,35 @@ function App() {
                   <Route path="video" element={<Video />} />
                 </Route>
                 <Route path="notifications" element={<Notifications />} />
+              </Route>
+            </Route>
+
+            <Route path="company" element={<ProtectedRoute />}>
+              <Route path="" element={<CompanyDashboard />}>
+                <Route
+                  index
+                  element={<Navigate replace to="dashboard-overview" />}
+                />
+                <Route
+                  path="dashboard-overview"
+                  element={<CompanyOverview />}
+                />
+                <Route
+                  path="candidate-filtering"
+                  element={<CandidateFiltering />}
+                />
+                <Route
+                  path="candidate-filtering/:name"
+                  element={<FilteredCandidateProfile />}
+                />
+                <Route
+                  path="job-posting"
+                  element={<JobPosting />}
+                />
+                <Route
+                  path="setting"
+                  element={<Settings />}
+                />
               </Route>
             </Route>
           </Route>

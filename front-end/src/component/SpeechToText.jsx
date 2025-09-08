@@ -25,7 +25,7 @@ const SpeechToText = ({ handleSpeechSubmition, setUserResponse }) => {
           setError("No speech detected. Please try again.");
           setStatus("idle");
         }
-      }, 5000); // Timeout after 5 seconds
+      }, 10000); // Timeout after 5 seconds
     };
 
     recognition.onresult = (event) => {

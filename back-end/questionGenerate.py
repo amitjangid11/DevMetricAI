@@ -55,14 +55,16 @@ text = ["some_text"]
 
 def generate_coding_question():
     response = client.models.generate_content(
-        model="gemini-2.0-flash", contents=f"Generate five coding questions for DSA, including hard, medium, and easy questions at FAANG interview level and give questions in the form {problems} but don't include this question this is just a example all 5 questions are new and match the level of FAANG coding questions."
+        model="gemini-2.5-pro", contents=f"""Generate 5 new FAANG-level DSA coding questions(easy, medium, hard).
+        Return JSON like this structure: {problems},
+        but do NOT repeat these exact questions. Only create new ones."""
     )
     return response.text
 
 
 def evaluate_user_code(allCode):
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         contents=(
             f"Evaluate the following code snippet thoroughly based on:\n"
             f"- **Correctness** (Does it function as expected?)\n"
@@ -92,6 +94,7 @@ def evaluate_user_code(allCode):
             f"    }}\n"
             f"  ]\n"
             f"}}\n"
+            f"  \"totalMarks\": <sum_of_all_scores>,\n"
             f"```\n"
             f"Ensure the output is a **valid JSON object**, not an array of objects."
         )
@@ -113,7 +116,7 @@ def generate_interview_question(answer: str, extracted_skills: list, domain: str
         3. Their latest answer: "{answer}"
         4. Domain: {domain}
         5. Project {project}
-        
+
         Follow these rules:
         - Start with introduction questions if the conversation is just beginning.
         - Then move to easy technical questions based on their skills.
@@ -127,7 +130,7 @@ def generate_interview_question(answer: str, extracted_skills: list, domain: str
 
         # Generate response using Gemini API
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model="gemini-2.5-pro",
             contents=prompt
         )
 
@@ -143,24 +146,28 @@ def generate_interview_question(answer: str, extracted_skills: list, domain: str
     else:
         score_prompt = f"""
         Analyze the conversation history and evaluate the user's performance.
-        
+
         1. Assign marks to each answer, ensuring the total score does not exceed 50.
-        2. Consider depth, correctness, edge cases, and alternative approaches.
-        3. Provide overall feedback summarizing performance.
-        4. Return a single JSON object with total marks and final feedback.
-        
+        2. If the user gave no valid answers or stayed silent, still assign **1 mark** (minimum score).
+        3. Consider depth, correctness, edge cases, and alternative approaches.
+        4. Provide overall feedback summarizing performance.
+        5. Return a single JSON object with total marks and final feedback.
+
         Conversation History: {conversation_history}
-        
-        Format: 
+
+        Format:
         {{
-        "TotalMarks": X,  
+        "totalMarks": X,
         "Feedback": "<Overall performance summary>"
         }}
-        Ensure that X is a single integer score out of 50.
+
+        Rules:
+        - X must always be an integer between 1 and 50 (never 0, never empty).
+        - Feedback must always be a non-empty string, even if the performance is very poor (e.g., "The user gave no valid answers. Needs significant improvement.").
         """
 
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model="gemini-2.5-flash",
             contents=score_prompt
         )
 
@@ -169,7 +176,7 @@ def generate_interview_question(answer: str, extracted_skills: list, domain: str
 
 def predict_domain_based_on_skills(skills):
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         contents=f"Predict the domain of a software engineer based on the following skills: {skills} and return in one word like Full Stack web developer, Machine Laerning Developer and so on."
     )
     return response.text
@@ -177,7 +184,7 @@ def predict_domain_based_on_skills(skills):
 
 def predict_user_strength_and_weakness(data):
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         contents=f"""
         Analyze the following user data: {data}. Identify exactly three strengths and three weaknesses based on coding scores, interview performance, and other relevant factors.
 
@@ -205,7 +212,7 @@ def predict_user_strength_and_weakness(data):
 
 def generate_aptitude_and_reasoning_questions():
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash-lite",
         contents=(
             "Generate 25 aptitude and reasoning questions ranging from easy, medium, to hard "
             "at FAANG interview style. "

@@ -32,20 +32,22 @@ function SignIn() {
   }, []);
 
   const googleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_PRODUCTION_BACKEND_URL}/login/google`;
+    window.location.href = `${
+      import.meta.env.VITE_PRODUCTION_BACKEND_URL
+    }/login/google`;
   };
   const githubLogin = () => {
-    window.location.href = `${import.meta.env.VITE_PRODUCTION_BACKEND_URL}/login/github`;
+    window.location.href = `${
+      import.meta.env.VITE_PRODUCTION_BACKEND_URL
+    }/login/github`;
   };
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post(
-        `/api/users/login`,
-        data
-      );
+      const res = await axios.post(`/api/users/login`, data);
 
       if (res.data.success === true) {
+        console.log("TOKEN:", res.data.token);
         localStorage.setItem("auth_token", JSON.stringify(res.data.token));
         toast.success("Welcome back! Ready to dive in? Let's go!");
         navigate("/");
@@ -83,7 +85,7 @@ function SignIn() {
               type="email"
               placeholder="Enter your email"
               autoFocus
-              className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-3 rounded-[10px] w-full"
+              className="bg-transparent border border-white/10 outline-none text-white py-2 px-3 rounded-[10px] w-full focus:border-blue-400"
               autoComplete="new-email"
               {...register("email", {
                 required: true,
@@ -100,7 +102,7 @@ function SignIn() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
-              className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-3 rounded-[10px] pr-10 w-full"
+              className="bg-transparent border border-white/10 outline-none text-white py-2 px-3 rounded-[10px] pr-10 w-full focus:border-blue-400"
               autoComplete="new-password"
               {...register("password", {
                 required: true,
@@ -139,7 +141,7 @@ function SignIn() {
         {/* Social Logins */}
         <div className="mt-10 flex flex-col sm:flex-row gap-5">
           <button
-            className="flex gap-3 text-white items-center border-4 border-[#0C1A31] px-4 py-2 rounded-[10px] w-full sm:w-40 justify-center cursor-pointer"
+            className="flex gap-3 text-white items-center border-2 border-white/10 hover:bg-slate-900 px-4 py-2 rounded-[10px] w-full sm:w-40 justify-center cursor-pointer"
             onClick={googleLogin}
           >
             <img
@@ -150,7 +152,7 @@ function SignIn() {
             <span className="font-bold">Google</span>
           </button>
           <button
-            className="flex gap-3 text-white items-center border-4 border-[#0C1A31] px-4 py-2 rounded-[10px] w-full sm:w-40 justify-center cursor-pointer"
+            className="flex gap-3 text-white items-center border-2 border-white/10 hover:bg-slate-900 px-4 py-2 rounded-[10px] w-full sm:w-40 justify-center cursor-pointer"
             onClick={githubLogin}
           >
             <img

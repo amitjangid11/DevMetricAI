@@ -11,16 +11,21 @@ const steps = [
     id: 3,
     title: "Step 3",
     description:
-      "AI produced high-level coding questions comparable to those encountered at FAANG companies",
+      "AI produces high-level coding questions comparable to those encountered at FAANG companies",
   },
   {
     id: 4,
     title: "Step 4",
-    description: "AI starts asking personalized questions",
+    description: "You solve 25 aptitude and reasoning questions",
   },
   {
     id: 5,
     title: "Step 5",
+    description: "AI starts asking personalized questions",
+  },
+  {
+    id: 6,
+    title: "Step 6",
     description: "You answer in real-time & get feedback",
   },
 ];

@@ -52,7 +52,7 @@ const ImproveCard = ({ question, answer }) => {
       }
     }
 
-    fetchStrengthAndWeeknees();
+    // fetchStrengthAndWeeknees();
   }, []);
 
   return (

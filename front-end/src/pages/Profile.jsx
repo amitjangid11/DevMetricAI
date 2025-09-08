@@ -38,9 +38,13 @@ const ITJobs = [
 function Profile() {
   const userToken = localStorage.getItem("auth_token");
   const decoded = userToken && jwtDecode(userToken);
-  
+  console.log(decoded);
+
   const [email, setEmail] = useState(decoded?.email || "");
   const [name, setName] = useState(decoded?.name || "");
+  const [location, setLocation] = useState(decoded?.location || "");
+  const [bio, setBio] = useState(decoded?.bio || "");
+  const [socialLinks, setSocialLinks] = useState(decoded?.socialLinks || []);
   const [image, setImage] = useState(decoded?.picture || "");
   const [selectedRole, setSelectedRole] = useState(decoded?.role || "");
   const [otherRole, setOtherRole] = useState("");
@@ -184,6 +188,21 @@ function Profile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col">
+              <label className="text-white text-sm mb-1 font-bold">Bio</label>
+              <textarea
+                {...register("bio")}
+                placeholder="Enter your bio..."
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-2 rounded-[5px] w-full resize-none"
+                rows={5}
+                autoComplete="off"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col">
               <label className="text-white text-sm mb-1 font-bold">Email</label>
               <input
                 {...register("email")}
@@ -240,6 +259,59 @@ function Profile() {
               )}
             </div>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <label className="text-white text-sm mb-1 font-bold">
+                Location
+              </label>
+              <input
+                {...register("location")}
+                type="text"
+                placeholder="Enter your location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-2 rounded-[5px] w-full"
+                autoComplete="new-name"
+              />
+            </div>
+          </div>
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <label className="text-white text-sm mb-1 font-bold">
+                Social Link
+              </label>
+              {socialLinks.length > 0
+                ? socialLinks.map((item, index) => {
+                    return (
+                      <input
+                        key={index}
+                        {...register(`socialLinks.${index}`)}
+                        type="text"
+                        defaultValue={item}
+                        placeholder="Enter your popular social Link"
+                        className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-2 rounded-[5px] w-full mb-4"
+                        autoComplete="new-name"
+                      />
+                    );
+                  })
+                : ["https://google.com", "https://facebook.com"].map(
+                    (item, index) => {
+                      return (
+                        <input
+                          key={index}
+                          {...register(`socialLinks.${index}`)}
+                          type="text"
+                          defaultValue={item}
+                          placeholder="Enter your popular social Link"
+                          className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-2 rounded-[5px] w-full mb-4"
+                          autoComplete="new-name"
+                        />
+                      );
+                    }
+                  )}
+            </div>
+          </div> */}
 
           <div className="mt-6">
             <button

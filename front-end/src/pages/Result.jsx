@@ -78,6 +78,7 @@ function Result() {
             codeReviewObject = eval("(" + codeReviewStr + ")");
           }
         }
+        console.log("coding", codeReviewObject.totalMarks);
 
         setCodeEvaluations(codeReviewObject.evaluations || []);
 
@@ -86,19 +87,19 @@ function Result() {
           (acc, item) => acc + (item.score || 0),
           0
         );
+
         setCodingScore(totalCodingScore);
 
         // Parse interview score
-        const interviewStr = result.interview_review
-          ?.split("```")[1]
-          ?.split("json")[1]
-          ?.trim();
+        const interviewStr =
+          result.interview_review != "" &&
+          result.interview_review?.split("```")[1]?.split("json")[1]?.trim();
 
         let interviewReviewObject = null;
         if (interviewStr) {
           interviewReviewObject = JSON.parse(interviewStr);
         }
-        setInterviewScore(interviewReviewObject?.TotalMarks || 0);
+        setInterviewScore(interviewReviewObject?.totalMarks || 0);
 
         setAptitudeAndReasoningScore(
           result.reasoning_and_aptitude_review.totalMarks

@@ -22,6 +22,7 @@ from questionGenerate import predict_domain_based_on_skills
 from questionGenerate import predict_user_strength_and_weakness
 import re
 from bson import ObjectId
+import json
 
 from datetime import datetime
 
@@ -178,7 +179,8 @@ def signup_google():
 
 @app.route('/authorize/google/login')
 def authorize_google_login():
-    frontend_url = os.getenv("FRONTEND_URL") or "http://localhost:5173"
+    # prod_frontend_url = os.getenv("FRONTEND_URL")
+    dev_frontend_url = "http://localhost:5173"
     token = google.authorize_access_token()
     resp = google.get('userinfo')
     user_info = resp.json()
@@ -188,7 +190,7 @@ def authorize_google_login():
     user = collection.find_one({"email": email})
     if not user:
         error_params = urlencode({"error": "no_account"})
-        return redirect(f"{frontend_url}/signin?{error_params}")
+        return redirect(f"{dev_frontend_url}/signin?{error_params}")
 
     exp_time = datetime.utcnow() + timedelta(days=90)
     exp_timestamp = int(exp_time.timestamp())
@@ -202,7 +204,7 @@ def authorize_google_login():
     }, os.getenv("JWT_SECRET_KEY"), algorithm="HS256")
 
     params = urlencode({"token": jwt_token})
-    return redirect(f"{frontend_url}/oauth-callback?{params}")
+    return redirect(f"{dev_frontend_url}/oauth-callback?{params}")
 
 
 @app.route('/authorize/google/signup')
@@ -237,9 +239,10 @@ def authorize_google_signup():
         "expiredAt": exp_timestamp
     }, os.getenv("JWT_SECRET_KEY"), algorithm="HS256")
 
-    frontend_url = os.getenv("FRONTEND_URL") or "http://localhost:5173"
+    # prod_frontend_url = os.getenv("FRONTEND_URL")
+    dev_frontend_url = "http://localhost:5173"
     params = urlencode({"token": jwt_token})
-    return redirect(f"{frontend_url}/oauth-callback?{params}")
+    return redirect(f"{dev_frontend_url}/oauth-callback?{params}")
 
 
 @app.route("/login/github")
@@ -351,6 +354,8 @@ def signup():
     email = data.get("email")
     password = data.get("password")
     role = data.get("role")
+    location = data.get("location")
+    yearOfExperiences = data.get("yearOfExperiences")
 
     if not name or not email or not password or not role:
         return {"error": "No data provided"}, 400
@@ -363,17 +368,17 @@ def signup():
         "role": role,
         "password": hashPassword,
         "auth_type": "credentials",
-        "picture": "", }
+        "picture": "",
+        "location": location,
+        "yearOfExperiences": yearOfExperiences,
+        "bio": "",
+        "socialLinks": [],
+        "skills": []
+    }
 
     collection.insert_one(userData)
 
-    exp_time = datetime.utcnow() + timedelta(days=90)
-    exp_timestamp = int(exp_time.timestamp())
-
-    token = jwt.encode({"name": name, "email": email, "role": role, "auth_type": "credentials", "picture": "",
-                       "expiredAt": exp_timestamp}, os.getenv("JWT_SECRET_KEY"),
-                       algorithm="HS256",)
-    return {"success": True, "token": token}, 201
+    return {"success": True}, 201
 
 
 @app.route(f"{USER_API}/login", methods=["POST"])
@@ -395,6 +400,8 @@ def login():
     exp_timestamp = int(exp_time.timestamp())
 
     token = jwt.encode({"name": user["name"], "email": email, "role": user["role"],
+                        "location": user["location"], "yearOfExperiences": user["yearOfExperiences"], "bio": user["bio"],
+                        "socialLinks": user["socialLinks"],
                        "expiredAt": exp_timestamp}, os.getenv("JWT_SECRET_KEY"),
                        algorithm="HS256",)
 
@@ -433,6 +440,10 @@ def upload_resume():
     # we have to store extracted_skill and domain in db
     extractSkill.insert_one(
         {"email": email, "skills": EXTRACTED_SKILLS, "domain": DOMAIN, "extracted_projects": extracted_projects})
+
+    collection.update_one(
+        {"email": email, }, {"$set": {"skills": EXTRACTED_SKILLS, "created_at": current_time}})
+
     question = generate_coding_question()
     os.remove(filepath)
 
@@ -447,7 +458,13 @@ def review_codes():
     answer = evaluate_user_code(data)
 
     result = codeEvaluation.insert_one(
-        {'email': email, "role": role, 'code_review': answer, "reasoning_and_aptitude_review": "", "interview_review": "", "created_at": current_time})
+        {"email": email,
+         "role": role,
+         "code_review": answer,
+         "reasoning_and_aptitude_review": "",
+         "interview_review": "",
+         "totalMarks": "",
+         "created_at": current_time})
 
     cuurID = result.inserted_id
     print(cuurID)
@@ -506,11 +523,47 @@ def generate_interview_question():
                             {"$set": {"plan.status": "inactive"}}
                         )
                 except Exception as e:
-                    print("Error parsing end_date:", e)                
+                    print("Error parsing end_date:", e)
 
-        # Update this code
+    # TODO: Calculate correct totalMarks
+
+    codeEvaluation.update_one(
+        {'_id': ObjectId(codeEvaluationID)}, {"$set": {"interview_review": question, "created_at": current_time}})
+
+    doc = codeEvaluation.find_one({"_id": ObjectId(codeEvaluationID)})
+
+    if doc:
+        def safe_extract(json_str, key):
+            if not json_str:
+                return 0
+            try:
+                # Case 1: already a dict
+                if isinstance(json_str, dict):
+                    return json_str.get(key, 0)
+
+                # Case 2: string with/without fences
+                clean_str = re.sub(
+                    r"^```(?:json)?\s*|\s*```$", "", json_str.strip())
+                parsed = json.loads(clean_str)
+                return parsed.get(key, 0)
+            except Exception as e:
+                print("Parse error:", e)
+                return 0
+
+        code_marks = safe_extract(doc.get("code_review"), "totalMarks")
+        aptitude_marks = doc.get(
+            "reasoning_and_aptitude_review", {}).get("totalMarks", 0)
+        interview_marks = safe_extract(
+            doc.get("interview_review"), "totalMarks")
+
+        print("Code Review Marks:", code_marks)
+        print("Reasoning & Aptitude Marks:", aptitude_marks)
+        print("Interview Marks:", interview_marks)
+        totalMarks = code_marks + aptitude_marks + interview_marks
+        print("total", totalMarks)
+
         codeEvaluation.update_one(
-            {'_id': ObjectId(codeEvaluationID)}, {"$set": {"interview_review": question, "created_at": current_time}})
+            {'_id': ObjectId(codeEvaluationID)}, {"$set": {"totalMarks": totalMarks, "created_at": current_time}})
 
     return jsonify({"message": "Interview question generated successfully", "question": question})
 
@@ -670,15 +723,19 @@ def update_profile():
     updated_role = updated_data.get("role")
     email = updated_data.get("email")
     image_url = updated_data.get("image")
+    updated_bio = updated_data.get("bio")
+    updated_location = updated_data.get("location")
 
     collection.update_one(
         {"email": email},
-        {"$set": {"name": updated_name, "role": updated_role, "picture": image_url}}
+        {"$set": {"name": updated_name, "role": updated_role,
+                  "picture": image_url, "bio": updated_bio, "location": updated_location}}
     )
 
     exp_time = datetime.utcnow() + timedelta(days=90)
     exp_timestamp = int(exp_time.timestamp())
     token = jwt.encode({"name": updated_name, "email": email, "role": updated_role, "picture": image_url,
+                        "bio": updated_bio, "location": updated_location,
                        "expiredAt": exp_timestamp}, os.getenv("JWT_SECRET_KEY"),
                        algorithm="HS256",)
 
@@ -815,6 +872,43 @@ def get_candidate_credits():
     userCreditsData["_id"] = str(userCreditsData["_id"])
 
     return jsonify(userCreditsData), 200
+
+
+@app.route('/api/get-leaderboard-data')
+def get_leaderboard_data():
+    pipeline = [
+        {
+            "$lookup": {
+                "from": "codeEvaluation",
+                "localField": "email",
+                "foreignField": "email",
+                "as": "marksRecords"
+            }
+        },
+        {
+            "$addFields": {
+                "highestMarks": {"$max": "$marksRecords.totalMarks"},
+                "interviewCount": {"$size": "$marksRecords"}
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "name": 1,
+                "email": 1,
+                "picture": 1,
+                "location": 1,
+                "highestMarks": 1,
+                "interviewCount": 1
+            }
+        },
+        {
+            "$sort": {"highestMarks": -1}  # top scorers first
+        }
+    ]
+
+    leaderboard_data = list(collection.aggregate(pipeline))
+    return jsonify({"success": True, "leaderboardData": leaderboard_data})
 
 
 if __name__ == '__main__':

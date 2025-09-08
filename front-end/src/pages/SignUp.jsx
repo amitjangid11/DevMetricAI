@@ -53,10 +53,7 @@ function SignUp() {
 
       delete finalData.otherRole;
 
-      await axios.post(
-        `/api/users/signup`,
-        finalData
-      );
+      await axios.post(`/api/users/signup`, finalData);
       toast.success(
         "Welcome aboard! Your account is ready. Sign in and start exploring."
       );
@@ -73,11 +70,15 @@ function SignUp() {
   console.log("BACKEND ->", import.meta.env.VITE_PRODUCTION_BACKEND_URL);
 
   const googleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_PRODUCTION_BACKEND_URL}/signup/google`;
+    window.location.href = `${
+      import.meta.env.VITE_PRODUCTION_BACKEND_URL
+    }/signup/google`;
   };
 
   const githubLogin = () => {
-    window.location.href = `${import.meta.env.VITE_PRODUCTION_BACKEND_URL}/signup/github`;
+    window.location.href = `${
+      import.meta.env.VITE_PRODUCTION_BACKEND_URL
+    }/signup/github`;
   };
 
   return (
@@ -103,9 +104,9 @@ function SignUp() {
             </label>
             <input
               type="text"
-              placeholder="Enter your name"
+              placeholder="e.g. John"
               autoFocus
-              className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-2 rounded-[10px] w-full"
+              className="bg-transparent border-2 border-white/10 outline-none text-white py-2 px-2 rounded-[10px] w-full focus:border-blue-400"
               autoComplete="new-name"
               {...register("name", {
                 required: true,
@@ -117,8 +118,8 @@ function SignUp() {
             <label className="text-white text-sm mb-1 font-bold">Email</label>
             <input
               type="email"
-              placeholder="Enter your email"
-              className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-2 rounded-[10px] w-full"
+              placeholder="e.g. john@gmail.com"
+              className="bg-transparent border-2 border-white/10 outline-none text-white py-2 px-2 rounded-[10px] w-full focus:border-blue-400"
               autoComplete="new-email"
               {...register("email", {
                 required: true,
@@ -131,7 +132,7 @@ function SignUp() {
             <label className="text-white text-sm mb-1 font-bold">Role</label>
             <select
               {...register("role", { required: true })}
-              className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-2 rounded-[10px] w-full"
+              className="bg-transparent border-2 border-white/10 outline-none text-white py-2 px-2 rounded-[10px] w-full focus:border-blue-400"
               value={selectedRole}
               onChange={(e) => {
                 setSelectedRole(e.target.value);
@@ -157,7 +158,7 @@ function SignUp() {
               <input
                 type="text"
                 placeholder="Enter your role"
-                className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-2 rounded-[10px] w-full mt-2"
+                className="bg-transparent border-2 border-white/10 outline-none text-white py-2 px-2 rounded-[10px] w-full mt-2 focus:border-blue-400"
                 {...register("otherRole", {
                   required: !isOtherRoleDisabled,
                 })}
@@ -168,6 +169,35 @@ function SignUp() {
             )}
           </div>
 
+          <div className="flex flex-col">
+            <label className="text-white text-sm mb-1 font-bold">
+              Location
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. Jaipur"
+              className="bg-transparent border-2 border-white/10 outline-none text-white py-2 px-2 rounded-[10px] w-full focus:border-blue-400"
+              autoComplete="new-location"
+              {...register("location", {
+                required: true,
+              })}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-white text-sm mb-1 font-bold">
+              Year of Experiences
+            </label>
+            <input
+              type="number"
+              placeholder="e.g. 3"
+              className="bg-transparent border-2 border-white/10 outline-none text-white py-2 px-2 rounded-[10px] w-full focus:border-blue-400"
+              autoComplete="new-experiences"
+              {...register("yearOfExperiences", {
+                required: true,
+              })}
+            />
+          </div>
+
           <div className="flex flex-col relative">
             <label className="text-white text-sm mb-1 font-bold">
               Password
@@ -175,7 +205,7 @@ function SignUp() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
-              className="bg-transparent border-4 border-[#0C1A31] outline-none text-white py-2 px-2 rounded-[10px] pr-8 w-full"
+              className="bg-transparent border-2 border-white/10 outline-none text-white py-2 px-2 rounded-[10px] pr-8 w-full focus:border-blue-400"
               autoComplete="new-password"
               {...register("password", {
                 required: true,
@@ -204,7 +234,7 @@ function SignUp() {
         </form>
         <div className="mt-10 flex flex-col sm:flex-row gap-5">
           <button
-            className="flex gap-3 text-white items-center border-4 border-[#0C1A31] px-4 py-2 rounded-[10px] w-full sm:w-40 justify-center cursor-pointer"
+            className="flex gap-3 text-white items-center border-2 border-white/10 hover:bg-slate-900 px-4 py-2 rounded-[10px] w-full sm:w-40 justify-center cursor-pointer"
             onClick={googleLogin}
           >
             <img
@@ -215,7 +245,7 @@ function SignUp() {
             <span className="font-bold">Google</span>
           </button>
           <button
-            className="flex gap-3 text-white items-center border-4 border-[#0C1A31] px-4 py-2 rounded-[10px] w-full sm:w-40 justify-center cursor-pointer"
+            className="flex gap-3 text-white items-center border-2 border-white/10 hover:bg-slate-900 px-4 py-2 rounded-[10px] w-full sm:w-40 justify-center cursor-pointer"
             onClick={githubLogin}
           >
             <img

@@ -28,6 +28,7 @@ const InterviewTable = () => {
         );
 
         const interviewData = res.data.results;
+        console.log(interviewData[0]);
 
         const filterData =
           interviewData &&
@@ -48,6 +49,8 @@ const InterviewTable = () => {
                   )
                 : null,
               role: interview.role,
+              reasoningAndAptitudeReview:
+                interview.reasoning_and_aptitude_review,
               interviewDate: interview.created_at ? interview.created_at : null,
             };
           });
@@ -56,8 +59,10 @@ const InterviewTable = () => {
           return {
             codeScore: items.codeReview.evaluations.map((item) => item.score),
             interviewScore: items.interviewReview
-              ? items.interviewReview.TotalMarks
+              ? items.interviewReview.totalMarks
               : null,
+            reasoningAndAptitudeScore:
+              items.reasoningAndAptitudeReview.totalMarks,
             created_at: formatDate(items.interviewDate),
             interviewType: items.role,
           };
@@ -70,7 +75,8 @@ const InterviewTable = () => {
             status: "Completed ✅",
             score: items.interviewScore
               ? items.codeScore.reduce((prev, curr) => prev + curr) +
-                items.interviewScore
+                items.interviewScore +
+                items.reasoningAndAptitudeScore
               : items.codeScore.reduce((prev, curr) => prev + curr),
             action: "Download Report 📄",
           };

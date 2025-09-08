@@ -48,59 +48,13 @@ const Charts = () => {
 
         const interviewData = res.data.results;
 
-        const filterData =
-          interviewData &&
-          interviewData.map((interview) => {
-            return {
-              codeReview: eval(
-                "(" +
-                  interview.code_review.split("```")[1].split("json")[1] +
-                  ")"
-              ),
-              interviewReview: interview.interview_review
-                ? eval(
-                    "(" +
-                      interview.interview_review
-                        .split("```")[1]
-                        .split("json")[1] +
-                      ")"
-                  )
-                : null,
-              role: interview.role,
-              interviewDate: interview.created_at || null,
-            };
-          });
+        // ✅ Just map totalMarks and created_at
+        const scores = interviewData.map((interview) => ({
+          score: interview.totalMarks || 0,
+          date: formatDate(interview.created_at),
+        }));
 
-        const codeScore = filterData.map((items) => {
-          return {
-            codeScore: items.codeReview.evaluations.map((item) => item.score),
-            interviewScore: items.interviewReview
-              ? items.interviewReview.TotalMarks
-              : null,
-            created_at: formatDate(items.interviewDate),
-            interviewType: items.role,
-          };
-        });
-
-        const finalInterviewData = codeScore.map((items) => {
-          return {
-            type: items.interviewType,
-            date: items.created_at,
-            status: "Completed ✅",
-            score: items.interviewScore
-              ? items.codeScore.reduce((prev, curr) => prev + curr) +
-                items.interviewScore
-              : items.codeScore.reduce((prev, curr) => prev + curr),
-            action: "Download Report 📄",
-          };
-        });
-
-        const scores = finalInterviewData.map((items) => {
-          return {
-            score: items.score,
-            date: items.date,
-          };
-        });
+        console.log(scores);
 
         setInterviewScores(scores.map((i) => i.score));
         setInterviewDates(scores.map((i) => i.date));

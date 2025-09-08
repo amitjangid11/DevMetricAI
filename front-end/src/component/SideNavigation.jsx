@@ -1,53 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FaRegUser, FaViacoin } from "react-icons/fa";
-import { VscPreview } from "react-icons/vsc";
-import { GrDocumentPerformance } from "react-icons/gr";
-import { HiSparkles } from "react-icons/hi2";
-import { IoIosNotificationsOutline } from "react-icons/io";
-import { BiLogOut } from "react-icons/bi";
 import { Menu, X } from "lucide-react";
-
-const sideLink = [
-  {
-    icon: <FaRegUser />,
-    text: "Profile",
-    link: "/app/profile/profile-details",
-  },
-  {
-    icon: <VscPreview />,
-    text: "Previous Interview",
-    link: "/app/profile/previous-interview",
-  },
-  {
-    icon: <GrDocumentPerformance />,
-    text: "Performance",
-    link: "/app/profile/performance",
-  },
-  {
-    icon: <HiSparkles />,
-    text: "Suggestions",
-    link: "/app/profile/suggestions",
-  },
-  {
-    icon: <FaViacoin />,
-    text: "Your DevCredits",
-    link: "/app/profile/devcredits",
-  },
-  {
-    icon: <IoIosNotificationsOutline />,
-    text: "Notifications",
-    link: "/app/profile/notifications",
-  },
-  { icon: <BiLogOut />, text: "Logout", link: "/app" },
-];
 
 function handleLogout() {
   localStorage.removeItem("auth_token");
   window.dispatchEvent(new Event("userLoggedOut"));
 }
 
-function SideNavigation() {
+function SideNavigation({ sideLink }) {
   const [showHamburger, setShowHamburger] = useState(false);
 
   return (

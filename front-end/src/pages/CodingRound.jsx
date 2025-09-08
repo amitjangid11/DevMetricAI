@@ -161,78 +161,78 @@ export default function CodingRound() {
     };
   }, [countTabSwitch]);
 
-  useEffect(() => {
-    async function loadModel() {
-      const model = await faceLandmarksDetection.load(
-        faceLandmarksDetection.SupportedPackages.mediapipeFacemesh
-      );
-      if (videoRef.current) {
-        const detect = async () => {
-          const predictions = await model.estimateFaces({
-            input: videoRef.current,
-          });
-          if (predictions.length > 1) {
-            setIsCheating(true);
-            setWarning("🚨 Multiple faces detected!");
-          }
-          requestAnimationFrame(detect);
-        };
-        detect();
-      }
-    }
+  // useEffect(() => {
+  //   async function loadModel() {
+  //     const model = await faceLandmarksDetection.load(
+  //       faceLandmarksDetection.SupportedPackages.mediapipeFacemesh
+  //     );
+  //     if (videoRef.current) {
+  //       const detect = async () => {
+  //         const predictions = await model.estimateFaces({
+  //           input: videoRef.current,
+  //         });
+  //         if (predictions.length > 1) {
+  //           setIsCheating(true);
+  //           setWarning("🚨 Multiple faces detected!");
+  //         }
+  //         requestAnimationFrame(detect);
+  //       };
+  //       detect();
+  //     }
+  //   }
 
-    if (videoRef.current) {
-      navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-        videoRef.current.srcObject = stream;
-        loadModel();
-      });
-    }
-  }, []);
+  //   if (videoRef.current) {
+  //     navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+  //       videoRef.current.srcObject = stream;
+  //       loadModel();
+  //     });
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    let lastFaceBox = null;
-    let idleTimer = null;
+  // useEffect(() => {
+  //   let lastFaceBox = null;
+  //   let idleTimer = null;
 
-    async function trackFaceMovement() {
-      const model = await faceLandmarksDetection.load(
-        faceLandmarksDetection.SupportedPackages.mediapipeFacemesh
-      );
+  //   async function trackFaceMovement() {
+  //     const model = await faceLandmarksDetection.load(
+  //       faceLandmarksDetection.SupportedPackages.mediapipeFacemesh
+  //     );
 
-      const detect = async () => {
-        if (videoRef.current) {
-          const predictions = await model.estimateFaces({
-            input: videoRef.current,
-          });
+  //     const detect = async () => {
+  //       if (videoRef.current) {
+  //         const predictions = await model.estimateFaces({
+  //           input: videoRef.current,
+  //         });
 
-          if (predictions.length === 1) {
-            const faceBox = predictions[0].boundingBox;
-            if (lastFaceBox) {
-              const dx = Math.abs(faceBox.topLeft[0] - lastFaceBox.topLeft[0]);
-              const dy = Math.abs(faceBox.topLeft[1] - lastFaceBox.topLeft[1]);
+  //         if (predictions.length === 1) {
+  //           const faceBox = predictions[0].boundingBox;
+  //           if (lastFaceBox) {
+  //             const dx = Math.abs(faceBox.topLeft[0] - lastFaceBox.topLeft[0]);
+  //             const dy = Math.abs(faceBox.topLeft[1] - lastFaceBox.topLeft[1]);
 
-              if (dx < 10 && dy < 10) {
-                // not moving
-                if (!idleTimer) {
-                  idleTimer = setTimeout(() => {
-                    setIsCheating(true);
-                    setWarning("🚨 No head movement detected for too long!");
-                  }, 15000); // 15s idle limit
-                }
-              } else {
-                clearTimeout(idleTimer);
-                idleTimer = null;
-              }
-            }
-            lastFaceBox = faceBox;
-          }
-        }
-        requestAnimationFrame(detect);
-      };
-      detect();
-    }
+  //             if (dx < 10 && dy < 10) {
+  //               // not moving
+  //               if (!idleTimer) {
+  //                 idleTimer = setTimeout(() => {
+  //                   setIsCheating(true);
+  //                   setWarning("🚨 No head movement detected for too long!");
+  //                 }, 15000); // 15s idle limit
+  //               }
+  //             } else {
+  //               clearTimeout(idleTimer);
+  //               idleTimer = null;
+  //             }
+  //           }
+  //           lastFaceBox = faceBox;
+  //         }
+  //       }
+  //       requestAnimationFrame(detect);
+  //     };
+  //     detect();
+  //   }
 
-    trackFaceMovement();
-  }, []);
+  //   trackFaceMovement();
+  // }, []);
 
   if (isLoading) return <Spinner message="Ai Review Your Code..." />;
 

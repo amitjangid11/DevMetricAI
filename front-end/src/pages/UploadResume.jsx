@@ -34,7 +34,7 @@ export default function UploadResume() {
         console.log(error);
       }
     };
-    createSubscription();
+    // createSubscription();
   }, []);
 
   const uploadFile = async (selectedFile) => {
