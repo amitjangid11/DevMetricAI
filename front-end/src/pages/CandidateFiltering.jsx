@@ -105,7 +105,6 @@ function CandidateFiltering() {
           </div>
 
           {/* Skills */}
-          {/* Skills */}
           <div className="flex flex-col relative">
             <label className="text-white text-sm mb-1 font-bold">Skills</label>
             <div className="flex flex-wrap items-center gap-2 bg-transparent border border-white/10 rounded-[10px] w-full min-h-[42px] px-2">
@@ -229,6 +228,7 @@ function CandidateFiltering() {
       <div className="p-8">
         <h1 className="text-2xl font-bold italic">{4} Candidates Found</h1>
         <div className="flex gap-4 flex-wrap mt-10">
+          {/* TODO: Add a heading before applying filter and also if no candidate found then show a heading for that too*/}
           {candidates.map((item, index) => {
             return <CandidatesCard key={index} item={item} />;
           })}

@@ -123,14 +123,8 @@ function App() {
                   path="candidate-filtering/:name"
                   element={<FilteredCandidateProfile />}
                 />
-                <Route
-                  path="job-posting"
-                  element={<JobPosting />}
-                />
-                <Route
-                  path="setting"
-                  element={<Settings />}
-                />
+                <Route path="job-posting/:step" element={<JobPosting />} />
+                <Route path="setting" element={<Settings />} />
               </Route>
             </Route>
           </Route>

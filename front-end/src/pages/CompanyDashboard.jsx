@@ -24,7 +24,7 @@ const sideLink = [
   {
     icon: <FaBriefcase />, // Job posting icon
     text: "Job Posting",
-    link: "/app/company/job-posting",
+    link: "/app/company/job-posting/1",
   },
   {
     icon: <FaCog />, // Settings gear
