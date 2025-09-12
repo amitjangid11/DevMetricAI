@@ -41,7 +41,7 @@ function CompleteProfile() {
   const [selectedRole, setSelectedRole] = useState("");
   const [otherRole, setOtherRole] = useState("");
   const [isOtherRoleDisabled, setIsOtherRoleDisabled] = useState(true);
-  const [initialData, setInitialData] = useState({});
+  const [email, setEmail] = useState("");
 
   const { register, handleSubmit, reset, getFieldState, getValues } = useForm();
   const navigate = useNavigate();
@@ -49,33 +49,30 @@ function CompleteProfile() {
   useEffect(() => {
     const initialToken = localStorage.getItem("initial-token");
     const decoded = jwtDecode(initialToken);
-    console.log(decoded);
 
-    const initialObj = {
-      name: decoded.name,
-      email: decoded.email,
-      picture: decoded.picture,
-    };
-
-    setInitialData(initialObj);
+    setEmail(decoded.email);
   }, []);
-
-  console.log("InitialData:", initialData);
 
   async function onSubmit(data) {
     try {
       const finalData = {
         ...data,
         role: data.role === "Other" ? data.otherRole : data.role,
+        email: email,
       };
+
+      console.log(finalData);
 
       delete finalData.otherRole;
 
-      await axios.post(`/api/users/signup`, finalData);
-      toast.success(
-        "Welcome aboard! Your account is ready. Sign in and start exploring."
-      );
-      navigate("/signin");
+      const res = await axios.post(`/api/complete-profile`, finalData);
+
+      if (res.status === 200) {
+        localStorage.setItem("auth_token", res.data.token);
+        toast.success("Welcome aboard! Your account is ready.");
+        navigate("/");
+      }
+      
     } catch (error) {
       console.error("Signup Error:", error);
       toast.error(
