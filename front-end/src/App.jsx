@@ -40,6 +40,7 @@ import CandidateFiltering from "./pages/CandidateFiltering";
 import JobPosting from "./pages/JobPosting";
 import Settings from "./pages/Settings";
 import FilteredCandidateProfile from "./pages/FilteredCandidateProfile";
+import CompleteProfile from "./pages/CompleteProfile";
 
 function App() {
   return (
@@ -130,6 +131,7 @@ function App() {
           </Route>
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
+          <Route path="complete-profile" element={<CompleteProfile />} />
           <Route path="choose-your-type" element={<ChooseBeforeLogin />} />
           <Route path="company/register" element={<CompanyRegister />} />
           <Route path="verify-email" element={<EmailVerification />} />

@@ -12,9 +12,9 @@ const OAuthCallback = () => {
 
     if (token) {
       // store token in localStorage or cookies
-      localStorage.setItem("auth_token", token);
+      localStorage.setItem("initial-token", token);
       // redirect to homepage or dashboard
-      navigate("/"); // or wherever you want
+      navigate("/complete-profile"); // or wherever you want
     } else {
       // handle error
       console.error("No token received from backend");
