@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { X, Search } from "lucide-react";
-import { ITJobs, skillsArray, candidates } from "../Data/CandidateFiltering";
+import { ITJobs, skillsArray, candidates, preffredLocation } from "../Data/CandidateFiltering";
 import CandidatesCard from "../component/CandidatesCard";
 
-const preffredLocation = ["Remote", "Hybrid", "On-Site"];
+
 
 function CandidateFiltering() {
   const [selectedRole, setSelectedRole] = useState("");

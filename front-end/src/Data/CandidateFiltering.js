@@ -269,3 +269,5 @@ export const languagesArray = [
   "Yoruba",
   "Zulu",
 ];
+
+export const preffredLocation = ["Remote", "Hybrid", "On-Site"];

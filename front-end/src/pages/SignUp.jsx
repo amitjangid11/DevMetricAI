@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "../axios";
 import toast from "react-hot-toast";
+import { preffredLocation } from "../Data/CandidateFiltering";
 
 const ITJobs = [
   "Full Stack Web Developer",
@@ -182,6 +183,25 @@ function SignUp() {
                 required: true,
               })}
             />
+
+            <div className="flex flex-col mt-4">
+              <label className="text-white text-sm mb-1 font-bold">
+                Preferred Location
+              </label>
+              <select
+                {...register("preferredLocation", { required: true })}
+                className="bg-transparent border-2 border-white/10 outline-none text-white py-2 px-2 rounded-[10px] w-full focus:border-blue-400"
+              >
+                <option value="" className="text-black" disabled>
+                  Select preferred location
+                </option>
+                {preffredLocation.map((item, index) => (
+                  <option className="text-black" key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <div className="flex flex-col">
             <label className="text-white text-sm mb-1 font-bold">
