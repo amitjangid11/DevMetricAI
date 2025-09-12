@@ -144,6 +144,8 @@ function Profile() {
     if (email) getData();
   }, [email]);
 
+  console.log(image);
+
   return (
     <div className="mt-10 md:ml-40">
       <div className="flex flex-col md:flex-row items-center gap-4 md:gap-7 mb-10">
