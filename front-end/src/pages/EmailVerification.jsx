@@ -1,8 +1,30 @@
-import React from "react";
-import { Mail } from "lucide-react"; // nice mail icon
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Mail } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 function EmailVerification() {
+  const location = useLocation();
+  const email = location.state?.email || "example@yourcompany.com"; // fallback
+
+  const [loading, setLoading] = useState(false);
+
+  const handleResend = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/company/resend-verification", {
+        email,
+      });
+
+      toast.success(res.data.message || "Verification email resent!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to resend email.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#010301] px-4">
       <div className="bg-[#0C1A31] text-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center">
@@ -20,23 +42,25 @@ function EmailVerification() {
           Please check your inbox and verify to move further.
         </p>
 
-        {/* Example email display (you can pass it as props) */}
-        <p className="font-semibold text-[#3B82F6] mb-6">
-          example@yourcompany.com
-        </p>
+        {/* Show actual email */}
+        <p className="font-semibold text-[#3B82F6] mb-6">{email}</p>
 
         {/* Resend link */}
         <p className="text-gray-400 text-sm">
           Didn’t receive the email?{" "}
-          <button className="text-[#3B82F6] font-medium hover:underline">
-            Resend
+          <button
+            onClick={handleResend}
+            disabled={loading}
+            className="text-[#3B82F6] font-medium hover:underline disabled:opacity-50"
+          >
+            {loading ? "Sending..." : "Resend"}
           </button>
         </p>
 
         {/* Back to login */}
         <div className="mt-6">
           <Link
-            to="/company/register"
+            to="/company/login"
             className="border-2 border-[#152F56] rounded-[50px] p-3 md:p-4 w-40 md:w-44 hover:cursor-pointer hover:bg-[#152F56] text-white transition-all"
           >
             Back to Login

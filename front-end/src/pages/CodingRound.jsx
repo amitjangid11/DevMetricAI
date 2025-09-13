@@ -40,6 +40,58 @@ export default function CodingRound() {
   const [warning, setWarning] = useState("");
   const [countTabSwitch, setCountTabSwitch] = useState(0);
   const videoRef = useRef();
+  const [timeInSecond, setTimeInSecond] = useState(45 * 60);
+
+  useEffect(() => {
+    if (timeInSecond === 0) {
+      const handleSubmit = async () => {
+        alert("⏰ Time is up! Submitting your code...");
+
+        try {
+          setIsLoading(true);
+
+          const res = await axios.post(`/api/review-codes`, allCode, {
+            headers: {
+              "Content-Type": "application/json",
+              Email: decoded.email,
+              Role: decoded.role,
+            },
+          });
+
+          // Save evaluation ID
+          localStorage.setItem(
+            "codeEvaluationID",
+            JSON.stringify(res.data.cuurID)
+          );
+
+          alert("✅ Your code has been submitted successfully!");
+          navigate("/app/reasoning-and-aptitude-round?ques=1");
+        } catch (error) {
+          console.error("Submission failed:", error);
+          alert(
+            "❌ Something went wrong while submitting your code. Please contact support."
+          );
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      // call the async function
+      handleSubmit();
+    }
+
+    const interval = setInterval(() => {
+      setTimeInSecond((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeInSecond, allCode, navigate]);
+
+  function timeFormatter(time) {
+    const min = String(Math.floor(time / 60)).padStart(2, "0");
+    const sec = String(time % 60).padStart(2, "0");
+    return `${min}:${sec}`;
+  }
 
   const extension = events.content({
     paste: (event) => {
@@ -145,13 +197,14 @@ export default function CodingRound() {
       }
 
       if (countTabSwitch === 1) {
-        alert("First warning");
-      }
-      if (countTabSwitch === 2) {
-        alert("second and last warning");
-      }
-      if (countTabSwitch === 3) {
-        alert("done 🚫");
+        alert(
+          "⚠️ First Warning: Please remain on this tab to continue your coding test."
+        );
+      } else if (countTabSwitch === 2) {
+        alert("⚠️ Final Warning: Switching tabs again will end your test.");
+      } else if (countTabSwitch === 3) {
+        alert("❌ Your coding test has ended due to multiple tab switches.");
+        navigate("/"); // Navigate user back to home
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -159,7 +212,7 @@ export default function CodingRound() {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [countTabSwitch]);
+  }, [countTabSwitch, navigate]);
 
   // useEffect(() => {
   //   async function loadModel() {
@@ -251,23 +304,32 @@ export default function CodingRound() {
       >
         {/* Left Section - Code Editor */}
         <div className="flex-1 bg-[#0A0A0A] p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Code Editor</h2>
-          <select
-            className="w-[10vw] p-2 bg-[#181818] text-white rounded-lg mb-4 focus:ring-2"
-            value={selectedLanguage.value}
-            onChange={(e) =>
-              setSelectedLanguage(
-                languages.find((lang) => lang.value === e.target.value) ||
-                  languages[0]
-              )
-            }
-          >
-            {languages.map((lang) => (
-              <option key={lang.value} value={lang.value}>
-                {lang.label}
-              </option>
-            ))}
-          </select>
+          <div className="flex justify-between">
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Code Editor</h2>
+              <select
+                className="w-[10vw] p-2 bg-[#181818] text-white rounded-lg mb-4 focus:ring-2"
+                value={selectedLanguage.value}
+                onChange={(e) =>
+                  setSelectedLanguage(
+                    languages.find((lang) => lang.value === e.target.value) ||
+                      languages[0]
+                  )
+                }
+              >
+                {languages.map((lang) => (
+                  <option key={lang.value} value={lang.value}>
+                    {lang.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="rounded-[50px] border-2 border-[#152F56] text-center w-60 h-10 flex justify-center items-center">
+              <p className="text-xl">
+                Time Reamaining: {timeFormatter(timeInSecond)}
+              </p>
+            </div>
+          </div>
           <div className="border border-black bg-black rounded-lg overflow-hidden">
             <CodeMirror
               value={codes[selectedQuestion?.id] || ""}

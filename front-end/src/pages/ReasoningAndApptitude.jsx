@@ -13,6 +13,7 @@ function ReasoningAndApptitude() {
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [questions, setQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalMarks, setTotalMarks] = useState(0);
 
   useEffect(() => {
     async function generate_reasoning_question() {
@@ -65,6 +66,7 @@ function ReasoningAndApptitude() {
         currentQ={ques}
         totalQ={questions.length}
         isLoading={isLoading}
+        totalMarks={totalMarks}
       />
       <MCQ
         questionNumber={ques}
@@ -72,6 +74,8 @@ function ReasoningAndApptitude() {
         answer={correctAnswer}
         totalQ={questions.length}
         questions={questions}
+        totalMarks={totalMarks}
+        setTotalMarks={setTotalMarks}
       />
     </div>
   );

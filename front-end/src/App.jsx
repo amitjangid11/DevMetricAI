@@ -41,6 +41,8 @@ import JobPosting from "./pages/JobPosting";
 import Settings from "./pages/Settings";
 import FilteredCandidateProfile from "./pages/FilteredCandidateProfile";
 import CompleteProfile from "./pages/CompleteProfile";
+import CompanyProtectedRoute from "./protected/CompanyProtectedRoute";
+import PageNotFound from "./component/PageNotFound";
 
 function App() {
   return (
@@ -106,7 +108,7 @@ function App() {
               </Route>
             </Route>
 
-            <Route path="company" element={<ProtectedRoute />}>
+            <Route path="company" element={<CompanyProtectedRoute />}>
               <Route path="" element={<CompanyDashboard />}>
                 <Route
                   index
@@ -136,6 +138,7 @@ function App() {
           <Route path="company/register" element={<CompanyRegister />} />
           <Route path="verify-email" element={<EmailVerification />} />
           <Route path="oauth-callback" element={<OAuthCallback />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
       <Toaster

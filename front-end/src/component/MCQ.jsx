@@ -4,7 +4,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Spinner from "./Spinner";
 
-function MCQ({ questionNumber, options, totalQ, questions, answer }) {
+function MCQ({
+  questionNumber,
+  options,
+  totalQ,
+  questions,
+  answer,
+  totalMarks,
+  setTotalMarks,
+}) {
   const userToken = localStorage.getItem("auth_token");
   const decoded = userToken && jwtDecode(userToken);
 
@@ -14,8 +22,10 @@ function MCQ({ questionNumber, options, totalQ, questions, answer }) {
   const ques = searchParams.get("ques");
   const navigate = useNavigate();
   const [question, setQuestion] = useState("");
-  const [totalMarks, setTotalMarks] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [warning, setWarning] = useState("");
+  const [countTabSwitch, setCountTabSwitch] = useState(0);
+  const [isCheating, setIsCheating] = useState(false);
 
   const [answers, setAnswers] = useState({});
   const selectedOption = answers[ques] ?? null;
@@ -31,6 +41,32 @@ function MCQ({ questionNumber, options, totalQ, questions, answer }) {
       setQuestion(foundQuestion.question);
     }
   }, [questions, ques]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setCountTabSwitch((prev) => prev + 1);
+        setIsCheating(true);
+        setWarning("🚨 Tab switching detected!");
+      }
+
+      if (countTabSwitch === 1) {
+        alert(
+          "⚠️ First Warning: Please remain on this tab to continue your aptitude test."
+        );
+      } else if (countTabSwitch === 2) {
+        alert("⚠️ Final Warning: Switching tabs again will end your test.");
+      } else if (countTabSwitch === 3) {
+        alert("❌ Your aptitude test has ended due to multiple tab switches.");
+        navigate("/"); // Navigate user back to home
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [countTabSwitch, navigate]);
 
   const handleOption = (e, index) => {
     const userAnswer = e.target.innerHTML;

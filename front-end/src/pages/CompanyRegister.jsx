@@ -40,15 +40,24 @@ function CompanyRegister() {
 
   const navigate = useNavigate();
 
+  import axios from "axios";
+  import { toast } from "react-hot-toast";
+  import { useNavigate } from "react-router-dom";
+
   async function onSubmit(data) {
     try {
-      console.log(data);
+      // Send data to backend
+      const res = await axios.post("/api/company/register", data);
+
       toast.success(
-        "Welcome aboard! Your account is ready. Sign in and start exploring."
+        res.data?.message ||
+          "Registration successful! Your company account has been created. Please verify your email to proceed."
       );
+
+      // Redirect to email verification page and pass email state
       navigate("/verify-email", {
         state: {
-          data,
+          email: data.email,
         },
       });
     } catch (error) {

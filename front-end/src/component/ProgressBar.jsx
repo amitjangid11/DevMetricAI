@@ -1,16 +1,49 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Spinner from "./Spinner";
+import axios from "../axios";
+import { jwtDecode } from "jwt-decode";
 
-function ProgressBar({ currentQ, totalQ, isLoading }) {
+function ProgressBar({ currentQ, totalQ, isLoading, totalMarks }) {
   const progress = (currentQ / totalQ) * 100;
   const [searchParams] = useSearchParams();
   const ques = searchParams.get("ques");
   const [timeInSecond, setTimeInSecond] = useState(30 * 60);
+  const navigate = useNavigate();
+
+  const userToken = localStorage.getItem("auth_token");
+  const decoded = userToken && jwtDecode(userToken);
+
+  const codeEvaluationID = JSON.parse(localStorage.getItem("codeEvaluationID"));
 
   useEffect(() => {
     if (timeInSecond === 0) {
-      alert("Time is over");
-      return;
+      const handleSubmit = async () => {
+        alert("⏰ Time is up! Submitting your answer...");
+
+        try {
+          const response = await axios.post(
+            "/api/total-marks-of-aptitude-and-reasoning",
+            { totalMarks },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Email: decoded.email,
+                CodeEvaluationID: codeEvaluationID,
+              },
+            }
+          );
+
+          if (response.status === 200) {
+            navigate("/app/interview-round");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      // call the async function
+      handleSubmit();
     }
 
     const interval = setInterval(() => {
@@ -18,7 +51,7 @@ function ProgressBar({ currentQ, totalQ, isLoading }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [timeInSecond]);
+  }, [timeInSecond, totalMarks, codeEvaluationID, navigate, decoded]);
 
   if (isLoading) {
     return <h1 className="text-center">Loading...</h1>;
@@ -28,6 +61,10 @@ function ProgressBar({ currentQ, totalQ, isLoading }) {
     const min = String(Math.floor(time / 60)).padStart(2, "0");
     const sec = String(time % 60).padStart(2, "0");
     return `${min}:${sec}`;
+  }
+
+  if (isLoading) {
+    return <Spinner message="AI review your response..." />;
   }
 
   return (
