@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "../axios";
 
 const IndustryTypes = [
   "Information Technology (IT) & Software",
@@ -40,9 +41,8 @@ function CompanyRegister() {
 
   const navigate = useNavigate();
 
-  import axios from "axios";
-  import { toast } from "react-hot-toast";
-  import { useNavigate } from "react-router-dom";
+
+
 
   async function onSubmit(data) {
     try {
