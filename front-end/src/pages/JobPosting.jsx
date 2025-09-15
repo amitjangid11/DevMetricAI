@@ -27,7 +27,7 @@ function JobPosting() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen">
       {" "}
       <div className="p-8 flex flex-col gap-2">
         <h1 className="sm:text-[30px] md:text-4xl font-bold">

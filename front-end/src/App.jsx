@@ -108,6 +108,7 @@ function App() {
               </Route>
             </Route>
 
+          </Route>
             <Route path="company" element={<CompanyProtectedRoute />}>
               <Route path="" element={<CompanyDashboard />}>
                 <Route
@@ -130,7 +131,6 @@ function App() {
                 <Route path="setting" element={<Settings />} />
               </Route>
             </Route>
-          </Route>
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="complete-profile" element={<CompleteProfile />} />

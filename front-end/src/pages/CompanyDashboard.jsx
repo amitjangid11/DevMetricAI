@@ -1,4 +1,5 @@
 import SideNavigation from "../component/SideNavigation";
+import CompanyNavbar from "../component/CompanyNavbar"; // 👈 import your CompanyNavbar
 import { Outlet } from "react-router-dom";
 
 import {
@@ -6,43 +7,49 @@ import {
   FaUserCheck,
   FaBriefcase,
   FaCog,
-  FaSignOutAlt,
 } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
 
 const sideLink = [
   {
-    icon: <FaTachometerAlt />, // Dashboard/Overview icon
+    icon: <FaTachometerAlt />,
     text: "Overview",
-    link: "/app/company/dashboard-overview",
+    link: "/company/dashboard-overview",
   },
   {
-    icon: <FaUserCheck />, // Candidate filtering icon
+    icon: <FaUserCheck />,
     text: "Candidate Filtering",
-    link: "/app/company/candidate-filtering",
+    link: "/company/candidate-filtering",
   },
   {
-    icon: <FaBriefcase />, // Job posting icon
+    icon: <FaBriefcase />,
     text: "Job Posting",
-    link: "/app/company/job-posting/1",
+    link: "/company/job-posting/1",
   },
   {
-    icon: <FaCog />, // Settings gear
+    icon: <FaCog />,
     text: "Setting",
-    link: "/app/company/setting",
+    link: "/company/setting",
   },
- { icon: <BiLogOut />, text: "Logout", link: "/app" },
+  { icon: <BiLogOut />, text: "Logout", link: "/company" },
 ];
 
 function CompanyDashboard() {
   return (
-    <div className="h-screen flex">
-      {/* Fixed Sidebar (always visible on desktop, conditionally on mobile) */}
-      <SideNavigation sideLink={sideLink} />
+    <div className="min-h-screen flex flex-col bg-[#010301] text-white">
+      {/* ✅ Top Navbar */}
+      <header className="sticky top-0 z-50 bg-[#010301]">
+        <CompanyNavbar />
+      </header>
 
-      {/* Scrollable Content Area */}
-      <div className="w-full md:ml-64 h-full overflow-y-auto">
-        <Outlet />
+      <div className="flex flex-1">
+        {/* ✅ Sidebar */}
+        <SideNavigation sideLink={sideLink} />
+
+        {/* ✅ Scrollable Content Area */}
+        <div className="w-full md:ml-64 min-h-screen overflow-y-auto bg-[#010301]">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
