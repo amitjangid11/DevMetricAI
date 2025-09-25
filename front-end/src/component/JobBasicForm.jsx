@@ -1,14 +1,34 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { employmentTypes, jobDepartments } from "../Data/JobPosting";
 import { useForm } from "react-hook-form";
+import { useJobForm } from "../context/JobFormProvider";
 
-function JobBasicForm() {
+function JobBasicForm({ registerSave }) {
   const { register, handleSubmit, reset, getFieldState, getValues } = useForm();
   const [selectedRole, setSelectedRole] = useState("");
   const [otherRole, setOtherRole] = useState("");
   const [isOtherRoleDisabled, setIsOtherRoleDisabled] = useState(true);
+  const { updateForm, jobPostData } = useJobForm();
+
+  useEffect(() => {
+    registerSave.current = () => {
+      const values = getValues();
+      if (!values.jobTitle || !values.location) {
+        alert("Fill all required fields!");
+        return false;
+      }
+      updateForm("jobBasicForm", values);
+      return true;
+    };
+  }, [registerSave, updateForm, getValues]);
+
+  console.log("jobPostData", jobPostData);
+
   return (
-    <form action="" className="flex flex-col gap-5 justify-center items-center">
+    <form
+      action=""
+      className="flex flex-col gap-5 justify-center items-center"
+    >
       <div className="flex flex-col  w-[25vw]">
         <label className="text-white text-sm mb-1 font-bold mt-6">
           Job Title

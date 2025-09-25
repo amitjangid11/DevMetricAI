@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useJobForm } from "../context/JobFormProvider";
 
-function CompensationAndPerksForm() {
+function CompensationAndPerksForm({ registerSave }) {
   const { register, handleSubmit, reset, getFieldState, getValues } = useForm();
+
+  const { updateForm, jobPostData } = useJobForm();
 
   const perksArray = [
     "Health Insurance",
@@ -16,12 +19,29 @@ function CompensationAndPerksForm() {
     "Company Laptop/Equipment",
   ];
 
+  useEffect(() => {
+    registerSave.current = () => {
+      const values = getValues();
+      if (!values.salaryRange || !values.perks) {
+        alert("Fill all required fields!");
+        return false;
+      }
+      const finalData = {
+        salaryRange: values.salaryRange,
+        perks: values.perks,
+      };
+      updateForm("compensationAndPerksForm", finalData);
+      return true;
+    };
+  }, [getValues, updateForm, registerSave]);
+
+
   return (
     <form action="" className="flex flex-col gap-8 justify-center items-center">
       {/* Salary Range */}
       <div className="flex flex-col w-[25vw]">
         <label className="text-white text-sm mb-1 font-bold mt-6">
-          Salary Range
+          Salary Range (In INR per annum)
         </label>
         <input
           type="number"

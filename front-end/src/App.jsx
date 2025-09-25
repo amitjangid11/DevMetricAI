@@ -43,72 +43,73 @@ import FilteredCandidateProfile from "./pages/FilteredCandidateProfile";
 import CompleteProfile from "./pages/CompleteProfile";
 import CompanyProtectedRoute from "./protected/CompanyProtectedRoute";
 import PageNotFound from "./component/PageNotFound";
+import MainHome from "./pages/MainHome";
+import RedirectHandler from "./protected/RedirectHandler";
+import { JobFormProvider } from "./context/JobFormProvider";
 
 function App() {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Navigate replace to="/app/home" />} />{" "}
-          {/* Redirect root to /app/home */}
-          <Route path="app" element={<AppLayout />}>
-            <Route index element={<Navigate replace to="home" />} />
-            <Route path="home" element={<Home />} />
-            <Route path="about" element={<About />} />
-            <Route path="startInterview" element={<StartInterview />} />
-            <Route path="leaderboard" element={<Leaderboard />} />
+      <JobFormProvider>
+        <Router>
+          <Routes>
+            {/* Root should load MainHome directly */}
+            <Route path="/" element={<RedirectHandler />} />
+            <Route path="/main" element={<MainHome />} />
+            {/* Keep app-related routes under /app */}
+            <Route path="app" element={<AppLayout />}>
+              <Route index element={<Navigate replace to="home" />} />
+              <Route path="home" element={<Home />} />
+              <Route path="about" element={<About />} />
+              <Route path="startInterview" element={<StartInterview />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
 
-            <Route path="upload-resume" element={<ProtectedRoute />}>
-              <Route index element={<UploadResume />} />
-            </Route>
-            <Route path="coding-round" element={<ProtectedRoute />}>
-              <Route index element={<CodingRound />} />
-            </Route>
-            {/* <Route
-              path="reasoning-and-aptitude-round"
-              element={<ProtectedRoute />}
-            >
-              <Route index element={<ReasoningAndApptitude />} />
-            </Route> */}
-            <Route
-              path="reasoning-and-aptitude-round"
-              element={<ReasoningAndApptitude />}
-            />
+              <Route path="upload-resume" element={<ProtectedRoute />}>
+                <Route index element={<UploadResume />} />
+              </Route>
+              <Route path="coding-round" element={<ProtectedRoute />}>
+                <Route index element={<CodingRound />} />
+              </Route>
+              <Route
+                path="reasoning-and-aptitude-round"
+                element={<ReasoningAndApptitude />}
+              />
+              <Route path="interview-round" element={<ProtectedRoute />}>
+                <Route index element={<InterviewRound />} />
+              </Route>
+              <Route path="result" element={<ProtectedRoute />}>
+                <Route index element={<Result />} />
+              </Route>
+              <Route path="contact" element={<ProtectedRoute />}>
+                <Route index element={<Contact />} />
+              </Route>
+              <Route path="pricing" element={<Pricing />} />
 
-            <Route path="interview-round" element={<ProtectedRoute />}>
-              <Route index element={<InterviewRound />} />
-            </Route>
-            <Route path="result" element={<ProtectedRoute />}>
-              <Route index element={<Result />} />
-            </Route>
-            <Route path="contact" element={<ProtectedRoute />}>
-              <Route index element={<Contact />} />
-            </Route>
-            <Route path="pricing" element={<Pricing />} />
-            <Route path="profile" element={<ProtectedRoute />}>
-              <Route path="" element={<UserProfile />}>
-                <Route
-                  index
-                  element={<Navigate replace to="profile-details" />}
-                />
-                <Route path="profile-details" element={<Profile />} />
-                <Route
-                  path="previous-interview"
-                  element={<PreviousInterview />}
-                />
-                <Route path="performance" element={<UserPerformance />} />
-                <Route path="devcredits" element={<DevCredits />} />
-                <Route path="suggestions" element={<Suggestions />}>
-                  <Route index element={<Navigate replace to="article" />} />
-                  <Route path="article" element={<Article />} />
-                  <Route path="course" element={<Course />} />
-                  <Route path="video" element={<Video />} />
+              <Route path="profile" element={<ProtectedRoute />}>
+                <Route path="" element={<UserProfile />}>
+                  <Route
+                    index
+                    element={<Navigate replace to="profile-details" />}
+                  />
+                  <Route path="profile-details" element={<Profile />} />
+                  <Route
+                    path="previous-interview"
+                    element={<PreviousInterview />}
+                  />
+                  <Route path="performance" element={<UserPerformance />} />
+                  <Route path="devcredits" element={<DevCredits />} />
+                  <Route path="suggestions" element={<Suggestions />}>
+                    <Route index element={<Navigate replace to="article" />} />
+                    <Route path="article" element={<Article />} />
+                    <Route path="course" element={<Course />} />
+                    <Route path="video" element={<Video />} />
+                  </Route>
+                  <Route path="notifications" element={<Notifications />} />
                 </Route>
-                <Route path="notifications" element={<Notifications />} />
               </Route>
             </Route>
 
-          </Route>
+            {/* Company routes */}
             <Route path="company" element={<CompanyProtectedRoute />}>
               <Route path="" element={<CompanyDashboard />}>
                 <Route
@@ -131,16 +132,20 @@ function App() {
                 <Route path="setting" element={<Settings />} />
               </Route>
             </Route>
-          <Route path="signin" element={<SignIn />} />
-          <Route path="signup" element={<SignUp />} />
-          <Route path="complete-profile" element={<CompleteProfile />} />
-          <Route path="choose-your-type" element={<ChooseBeforeLogin />} />
-          <Route path="company/register" element={<CompanyRegister />} />
-          <Route path="verify-email" element={<EmailVerification />} />
-          <Route path="oauth-callback" element={<OAuthCallback />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Router>
+
+            {/* Auth & misc routes */}
+            <Route path="signin" element={<SignIn />} />
+            <Route path="signup" element={<SignUp />} />
+            <Route path="complete-profile" element={<CompleteProfile />} />
+            <Route path="choose-your-type" element={<ChooseBeforeLogin />} />
+            <Route path="company/register" element={<CompanyRegister />} />
+            <Route path="verify-email" element={<EmailVerification />} />
+            <Route path="oauth-callback" element={<OAuthCallback />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Router>
+      </JobFormProvider>
+
       <Toaster
         position="top-center"
         gutter={12}

@@ -1,9 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useJobForm } from "../src/context/JobFormProvider";
 
-function ApplicationSettingForm() {
+function ApplicationSettingForm({ registerSave }) {
   const { register, handleSubmit, reset, getFieldState, getValues } = useForm();
   const [applyMethod, setApplyMethod] = useState("");
+  const { updateForm, jobPostData } = useJobForm();
+
+  useEffect(() => {
+    registerSave.current = () => {
+      const values = getValues();
+
+      if (!values.applicationDeadline ||  !applyMethod) {
+        alert("Fill all required fields!");
+        return false;
+      }
+
+      // Build finalData based on applyMethod
+      let howToApplyData = {};
+      if (applyMethod === "email") {
+        if (!values.howToApplyEmail) {
+          alert("Please enter an email address!");
+          return false;
+        }
+        howToApplyData = { method: "email", value: values.howToApplyEmail };
+      } else if (applyMethod === "website") {
+        if (!values.howToApplyWebsite) {
+          alert("Please enter the application URL!");
+          return false;
+        }
+        howToApplyData = { method: "website", value: values.howToApplyWebsite };
+      } else if (applyMethod === "linkedin") {
+        if (!values.howToApplyLinkedIn) {
+          alert("Please enter the LinkedIn job URL!");
+          return false;
+        }
+        howToApplyData = {
+          method: "linkedin",
+          value: values.howToApplyLinkedIn,
+        };
+      } else if (applyMethod === "other") {
+        if (!values.howToApplyOther) {
+          alert("Please provide custom instructions!");
+          return false;
+        }
+        howToApplyData = { method: "other", value: values.howToApplyOther };
+      }
+
+      const finalData = {
+        applicationDeadline: values.applicationDeadline,
+        howToApply: howToApplyData,
+      };
+
+      updateForm("applicationSettingForm", finalData);
+      return true;
+    };
+  }, [getValues, updateForm, registerSave, applyMethod]);
+
+  console.log("jobPostData", jobPostData);
 
   return (
     <form action="" className="flex flex-col gap-5 justify-center items-center">
@@ -38,8 +92,8 @@ function ApplicationSettingForm() {
           <option value="email" className="bg-black text-white">
             Apply via Email
           </option>
-          <option value="portal" className="bg-black text-white">
-            Apply via Portal
+          <option value="linkedin" className="bg-black text-white">
+            Apply via Linkedin
           </option>
         </select>
 

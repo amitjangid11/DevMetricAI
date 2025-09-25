@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import StepBar from "../component/StepBar";
 import { Outlet, useNavigate } from "react-router-dom";
 import JobBasicForm from "../component/JobBasicForm";
@@ -6,23 +6,32 @@ import JobDetailForm from "../component/JobDetailForm";
 import SkillAndRequirenmentForm from "../component/SkillAndRequirenmentForm";
 import CompensationAndPerksForm from "../component/CompensationAndPerksForm";
 import ApplicationSettingForm from "../../components/ApplicationSettingForm";
+import { useJobForm } from "../context/JobFormProvider";
 
 function JobPosting() {
   const [currentStep, setCurrentStep] = useState(1);
+  const saveStepData = useRef(null);
   const navigate = useNavigate();
+  const { jobPostData } = useJobForm();
 
   const nextStep = () => {
+    if (saveStepData.current) {
+      const success = saveStepData.current(); // child validation + save
+      if (!success) return; // stop if invalid
+    }
+
     if (currentStep < 5) {
-      setCurrentStep(currentStep + 1);
-      // TODO: Don't navigate if field are empty.
-      navigate(`/app/company/job-posting/${currentStep + 1}`);
+      setCurrentStep((prev) => prev + 1);
+      navigate(`/company/job-posting/${currentStep + 1}`);
+    } else {
+      console.log("jobPostData", jobPostData);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      navigate(`/app/company/job-posting/${currentStep - 1}`);
+      navigate(`/company/job-posting/${currentStep - 1}`);
     }
   };
 
@@ -42,15 +51,15 @@ function JobPosting() {
         <StepBar currentStep={currentStep} />
         <div>
           {currentStep === 1 ? (
-            <JobBasicForm />
+            <JobBasicForm registerSave={saveStepData} />
           ) : currentStep === 2 ? (
-            <JobDetailForm />
+            <JobDetailForm registerSave={saveStepData} />
           ) : currentStep === 3 ? (
-            <SkillAndRequirenmentForm />
+            <SkillAndRequirenmentForm registerSave={saveStepData} />
           ) : currentStep === 4 ? (
-            <CompensationAndPerksForm />
+            <CompensationAndPerksForm registerSave={saveStepData} />
           ) : currentStep === 5 ? (
-            <ApplicationSettingForm />
+            <ApplicationSettingForm registerSave={saveStepData} />
           ) : null}
           <div className="flex justify-center items-center gap-35 mt-10">
             <button
@@ -64,9 +73,8 @@ function JobPosting() {
             <button
               className="rounded-[50px]  text-center border-2 border-white/10 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-black p-3 text-xs w-32 hover:bg-gray-800 transition-all duration-300 ease-in-out cursor-pointer"
               onClick={nextStep}
-              disabled={currentStep === 5}
             >
-              Next &rarr;
+              {currentStep != 5 ? "Next &rarr;" : "Submit"}
             </button>
           </div>
         </div>

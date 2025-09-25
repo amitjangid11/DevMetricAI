@@ -6,7 +6,7 @@ import { motion, useScroll } from "motion/react";
 import { Menu, X } from "lucide-react";
 
 const listItem = [
-  { path: "/", name: "Home" },
+  { path: "/app", name: "Home" },
   { path: "/app/about", name: "About" },
   { path: "/app/startInterview", name: "Start Interview" },
   { path: "/app/leaderboard?range=today", name: "Leaderboard" },

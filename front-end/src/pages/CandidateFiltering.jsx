@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { X, Search } from "lucide-react";
-import { ITJobs, skillsArray, candidates, preffredLocation } from "../Data/CandidateFiltering";
+import {
+  ITJobs,
+  skillsArray,
+  candidates,
+  preffredLocation,
+} from "../Data/CandidateFiltering";
 import CandidatesCard from "../component/CandidatesCard";
-
-
 
 function CandidateFiltering() {
   const [selectedRole, setSelectedRole] = useState("");
@@ -56,13 +59,21 @@ function CandidateFiltering() {
             No more endless scrolling through resumes. Apply filters, sort by
             performance, and instantly spot the best-fit talent for your role.
           </p>
+          <p className="text-lg text-gray-300 max-w-2xl">
+            We’re currently collecting candidate data to make this experience
+            meaningful. Once we’ve gathered enough talent insights, this feature
+            will be unlocked for you. 🚀
+          </p>
+          <div className="mt-8 animate-pulse">
+            <div className="h-3 w-52 bg-gray-600 rounded mb-2"></div>
+            <div className="h-3 w-64 bg-gray-600 rounded mb-2"></div>
+            <div className="h-3 w-40 bg-gray-600 rounded"></div>
+          </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* First row - 4 inputs */}
+      {/* <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-8">
-          {/* Role */}
           <div className="flex flex-col">
             <label className="text-white text-sm mb-1 font-bold">Role</label>
             <select
@@ -104,7 +115,6 @@ function CandidateFiltering() {
             )}
           </div>
 
-          {/* Skills */}
           <div className="flex flex-col relative">
             <label className="text-white text-sm mb-1 font-bold">Skills</label>
             <div className="flex flex-wrap items-center gap-2 bg-transparent border border-white/10 rounded-[10px] w-full min-h-[42px] px-2">
@@ -137,9 +147,8 @@ function CandidateFiltering() {
               />
             </div>
 
-            {/* Dropdown suggestions */}
             {filteredSkills.length > 0 && !isClose && (
-              <div className="absolute top-full left-0 mt-1 w-full bg-white/10 rounded-md shadow-lg z-10">
+              <div className="absolute top-full left-0 mt-1 w-full bg-white/10 rounded-md shadow-lg z-[10px]">
                 <ul>
                   {filteredSkills.map((item, index) => (
                     <li
@@ -161,7 +170,6 @@ function CandidateFiltering() {
             )}
           </div>
 
-          {/* Location */}
           <div className="flex flex-col">
             <label className="text-white text-sm mb-1 font-bold">
               Location
@@ -177,7 +185,6 @@ function CandidateFiltering() {
             />
           </div>
 
-          {/* Preferred Location */}
           <div className="flex flex-col">
             <label className="text-white text-sm mb-1 font-bold">
               Preferred Location
@@ -198,9 +205,7 @@ function CandidateFiltering() {
           </div>
         </div>
 
-        {/* Second row - keep 4 equal columns */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-8 pb-8">
-          {/* Experience */}
           <div className="flex flex-col">
             <label className="text-white text-sm mb-1 font-bold">
               Years of Experience
@@ -216,7 +221,6 @@ function CandidateFiltering() {
             />
           </div>
 
-          {/* Button aligned at the end */}
           <div className="flex items-end">
             <button className="inline-flex items-center rounded-md bg-cyan-500 px-4 py-2 text-sm font-medium text-black hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 cursor-pointer">
               Apply Filter
@@ -228,12 +232,12 @@ function CandidateFiltering() {
       <div className="p-8">
         <h1 className="text-2xl font-bold italic">{4} Candidates Found</h1>
         <div className="flex gap-4 flex-wrap mt-10">
-          {/* TODO: Add a heading before applying filter and also if no candidate found then show a heading for that too*/}
+          TODO: Add a heading before applying filter and also if no candidate found then show a heading for that too
           {candidates.map((item, index) => {
             return <CandidatesCard key={index} item={item} />;
           })}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

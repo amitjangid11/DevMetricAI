@@ -2,8 +2,9 @@ import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { skillsArray, languagesArray } from "../Data/CandidateFiltering";
+import { useJobForm } from "../context/JobFormProvider";
 
-function SkillAndRequirenmentForm() {
+function SkillAndRequirenmentForm({ registerSave }) {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [filteredSkills, setFilteredSkills] = useState([]);
   const [isCloseSkills, setIsCloseSkills] = useState(false);
@@ -11,11 +12,27 @@ function SkillAndRequirenmentForm() {
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [filteredLanguages, setFilteredLanguages] = useState([]);
   const [isCloseLanguages, setIsCloseLanguages] = useState(false);
+  const { updateForm, jobPostData } = useJobForm();
 
   const { register, watch, setValue } = useForm();
 
   const skillsInput = watch("skills", "");
   const languagesInput = watch("languages", "");
+
+  useEffect(() => {
+    registerSave.current = () => {
+      if (selectedSkills.length === 0 || selectedLanguages.length === 0) {
+        alert("Fill all required fields!");
+        return false;
+      }
+      const finalData = {
+        selectedSkills,
+        selectedLanguages,
+      };
+      updateForm("skillAndRequirenmentForm", finalData);
+      return true;
+    };
+  }, [registerSave, updateForm, selectedSkills, selectedLanguages]);
 
   // 🔹 Filter skills
   useEffect(() => {
@@ -106,7 +123,9 @@ function SkillAndRequirenmentForm() {
 
       {/* ====== Languages Input ====== */}
       <div className="flex flex-col relative">
-        <label className="text-white text-sm mb-1 font-bold">Languages (optional)</label>
+        <label className="text-white text-sm mb-1 font-bold">
+          Languages (optional)
+        </label>
         <div className="flex flex-wrap items-center gap-2 bg-transparent border border-white/10 rounded-[10px] w-[25vw] min-h-[42px] px-2">
           {selectedLanguages.map((lang) => (
             <span
