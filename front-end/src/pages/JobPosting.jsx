@@ -7,6 +7,8 @@ import SkillAndRequirenmentForm from "../component/SkillAndRequirenmentForm";
 import CompensationAndPerksForm from "../component/CompensationAndPerksForm";
 import ApplicationSettingForm from "../../components/ApplicationSettingForm";
 import { useJobForm } from "../context/JobFormProvider";
+import { jwtDecode } from "jwt-decode";
+import axios from "../axios";
 
 function JobPosting() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -14,7 +16,11 @@ function JobPosting() {
   const navigate = useNavigate();
   const { jobPostData } = useJobForm();
 
-  const nextStep = () => {
+  const companyToken = localStorage.getItem("company_token");
+  const decoded = jwtDecode(companyToken);
+  console.log(decoded.company.email);
+
+  const nextStep = async () => {
     if (saveStepData.current) {
       const success = saveStepData.current(); // child validation + save
       if (!success) return; // stop if invalid
@@ -24,7 +30,12 @@ function JobPosting() {
       setCurrentStep((prev) => prev + 1);
       navigate(`/company/job-posting/${currentStep + 1}`);
     } else {
-      console.log("jobPostData", jobPostData);
+      const finalData = {
+        ...jobPostData,
+        email: decoded.company.email,
+      };
+      console.log("jobPostData", finalData);
+      const res = await axios.post("/api/job-postings", finalData);
     }
   };
 
