@@ -46,6 +46,8 @@ import PageNotFound from "./component/PageNotFound";
 import MainHome from "./pages/MainHome";
 import RedirectHandler from "./protected/RedirectHandler";
 import { JobFormProvider } from "./context/JobFormProvider";
+import JobDetailsPage from "./component/JobDetailsPage";
+import JobDetails from "./pages/JobDetails";
 
 function App() {
   return (
@@ -104,7 +106,8 @@ function App() {
                     <Route path="course" element={<Course />} />
                     <Route path="video" element={<Video />} />
                   </Route>
-                  <Route path="notifications" element={<Notifications />} />
+                  <Route path="jobs" element={<Notifications />} />
+                  <Route path="job/:id" element={<JobDetails />} />
                 </Route>
               </Route>
             </Route>

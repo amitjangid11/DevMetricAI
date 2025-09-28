@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { CiLocationOn } from "react-icons/ci";
-import axios from '../axios';
+import axios from "../axios";
+import { Link } from "react-router-dom";
 
 function JobCard({ job }) {
   return (
@@ -15,12 +16,12 @@ function JobCard({ job }) {
         </p>
         <p className="text-gray-300 text-sm">{job.salary}</p>
       </div>
-      <a
-        href="#"
+      <Link
+        to={`/app/profile/job/${job.id}`}
         className="text-blue-400 hover:underline text-sm self-end mt-2"
       >
-        Apply Now
-      </a>
+        View Details
+      </Link>
     </div>
   );
 }
@@ -29,17 +30,20 @@ function JobListings() {
   const [jobListings, setJobListings] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/get/job-posting')
-      .then(response => {
-        const jobs = response.data.jobPostings.map(job => ({
+    axios
+      .get("/api/get/job-posting")
+      .then((response) => {
+        const jobs = response.data.jobPostings.map((job) => ({
+          id: job._id,
           title: job.jobBasicForm.jobTitle,
-          company: 'Company',
+          // company: job.name,
+          company: "Company",
           location: job.jobBasicForm.location,
-          salary: `₹ ${job.compensationAndPerksForm.salaryRange}000/month`
+          salary: `${job.compensationAndPerksForm.salaryRange} LPA`,
         }));
         setJobListings(jobs);
       })
-      .catch(error => console.error('Error fetching job postings:', error));
+      .catch((error) => console.error("Error fetching job postings:", error));
   }, []);
 
   return (

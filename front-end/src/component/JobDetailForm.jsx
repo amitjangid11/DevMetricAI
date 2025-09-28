@@ -51,6 +51,18 @@ function JobDetailForm({ registerSave }) {
           autoComplete="off"
         />
       </div>
+      <div className="flex flex-col w-[25vw]">
+        <label className="text-white text-sm mb-1 font-bold">
+          Company Description
+        </label>
+        <textarea
+          {...register("companyDesc")}
+          placeholder="Enter Company Description..."
+          className="bg-transparent border-2 border-white/10 outline-none text-white py-2 px-2 rounded-[5px] resize-none"
+          rows={5}
+          autoComplete="off"
+        />
+      </div>
 
       {/* Responsibilities */}
       <div className="flex flex-col w-[25vw]">

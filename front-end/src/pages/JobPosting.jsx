@@ -33,6 +33,7 @@ function JobPosting() {
       const finalData = {
         ...jobPostData,
         email: decoded.company.email,
+        name: decoded.company.name,
       };
       console.log("jobPostData", finalData);
       const res = await axios.post("/api/job-postings", finalData);
@@ -85,7 +86,7 @@ function JobPosting() {
               className="rounded-[50px]  text-center border-2 border-white/10 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-black p-3 text-xs w-32 hover:bg-gray-800 transition-all duration-300 ease-in-out cursor-pointer"
               onClick={nextStep}
             >
-              {currentStep != 5 ? "Next &rarr;" : "Submit"}
+              {currentStep != 5 ? "Next →" : "Submit"}
             </button>
           </div>
         </div>

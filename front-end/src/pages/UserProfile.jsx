@@ -35,8 +35,8 @@ const sideLink = [
   },
   {
     icon: <IoIosNotificationsOutline />,
-    text: "Notifications",
-    link: "/app/profile/notifications",
+    text: "Jobs",
+    link: "/app/profile/jobs",
   },
   { icon: <BiLogOut />, text: "Logout", link: "/app" },
 ];
