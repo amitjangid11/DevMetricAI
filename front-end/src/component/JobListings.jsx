@@ -1,31 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import { CiLocationOn } from "react-icons/ci";
-
-const jobListings = [
-  {
-    title: "Full Stack Web Developer",
-    company: "Wipro",
-    location: "Mumbai",
-    salary: "₹ 35000/month",
-  },
-  {
-    title: "Front End Developer",
-    company: "Meta",
-    location: "London",
-    salary: "₹ 70000/month",
-  },
-  {
-    title: "React Developer",
-    company: "Swiggy",
-    location: "Bangalore",
-    salary: "₹ 30000/month",
-  },
-  {
-    title: "Back End Developer",
-    company: "Amazon",
-    location: "Tokyo",
-    salary: "₹ 75000/month",
-  },
-];
+import axios from '../axios';
 
 function JobCard({ job }) {
   return (
@@ -51,6 +26,22 @@ function JobCard({ job }) {
 }
 
 function JobListings() {
+  const [jobListings, setJobListings] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/get/job-posting')
+      .then(response => {
+        const jobs = response.data.jobPostings.map(job => ({
+          title: job.jobBasicForm.jobTitle,
+          company: 'Company',
+          location: job.jobBasicForm.location,
+          salary: `₹ ${job.compensationAndPerksForm.salaryRange}000/month`
+        }));
+        setJobListings(jobs);
+      })
+      .catch(error => console.error('Error fetching job postings:', error));
+  }, []);
+
   return (
     <div className="bg-black min-h-screen py-10 px-4 sm:px-8">
       <h1 className="text-white text-2xl sm:text-3xl font-bold mb-6">
