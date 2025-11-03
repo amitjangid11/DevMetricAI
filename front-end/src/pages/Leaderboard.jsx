@@ -63,7 +63,7 @@ function Leaderboard() {
 
   return (
     <div>
-      <div className="h-[100vh] m-5">
+      <div className="h-96 m-5">
         <div className="flex justify-between items-center w-full">
           <div>
             <h1 className="text-3xl font-bold">Leaderboard - DevMetricAI</h1>

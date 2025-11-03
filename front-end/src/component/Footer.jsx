@@ -1,7 +1,7 @@
 
 function Footer() {
   return (
-    <div className="max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-20">
+    <div className="max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-20 h-[27.2rem]">
       {/* Subscription Section */}
       <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mt-8 mb-6">
         <input

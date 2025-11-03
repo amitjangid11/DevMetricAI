@@ -41,13 +41,12 @@ function CompanyRegister() {
 
   const navigate = useNavigate();
 
-
-
-
   async function onSubmit(data) {
     try {
       // Send data to backend
       const res = await axios.post("/api/company/register", data);
+
+      console.log("res:", res);
 
       toast.success(
         res.data?.message ||
