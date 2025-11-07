@@ -13,6 +13,7 @@ function CompanyNavbar() {
   useEffect(() => {
     const fetchUser = () => {
       const companyToken = localStorage.getItem("company_token");
+      console.log(companyToken);
       if (companyToken) {
         const decoded = jwtDecode(companyToken);
         setCompanyData(decoded);

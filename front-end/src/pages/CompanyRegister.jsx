@@ -53,6 +53,8 @@ function CompanyRegister() {
           "Registration successful! Your company account has been created."
       );
 
+      console.log(res);
+
       const token = res.data.token;
 
       localStorage.setItem("company_token", token);
