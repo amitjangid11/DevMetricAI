@@ -50,15 +50,21 @@ function CompanyRegister() {
 
       toast.success(
         res.data?.message ||
-          "Registration successful! Your company account has been created. Please verify your email to proceed."
+          "Registration successful! Your company account has been created."
       );
+      // toast.success(
+      //   res.data?.message ||
+      //     "Registration successful! Your company account has been created. Please verify your email to proceed."
+      // );
+
+      navigate("/company");
 
       // Redirect to email verification page and pass email state
-      navigate("/verify-email", {
-        state: {
-          email: data.email,
-        },
-      });
+      // navigate("/verify-email", {
+      //   state: {
+      //     email: data.email,
+      //   },
+      // });
     } catch (error) {
       console.error("Signup Error:", error);
       toast.error(
