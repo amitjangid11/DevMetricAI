@@ -18,7 +18,7 @@ function JobPosting() {
 
   const companyToken = localStorage.getItem("company_token");
   const decoded = jwtDecode(companyToken);
-  console.log(decoded.company.email);
+  console.log(decoded.email);
 
   const nextStep = async () => {
     if (saveStepData.current) {
