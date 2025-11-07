@@ -52,6 +52,11 @@ function CompanyRegister() {
         res.data?.message ||
           "Registration successful! Your company account has been created."
       );
+
+      const token = res.data.token;
+
+      localStorage.setItem("company_token", token);
+
       // toast.success(
       //   res.data?.message ||
       //     "Registration successful! Your company account has been created. Please verify your email to proceed."
